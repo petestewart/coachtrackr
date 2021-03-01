@@ -23,6 +23,7 @@ code {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-height: 50px;
 }
 
 .sidebar-item-content {
@@ -52,5 +53,10 @@ code {
 }
 
 .sidebar-expander {
-  margin-left: 16px
+  /* margin-left: 16px; */
+  margin-top: 10px;
+}
+
+.layout {
+  display: flex;
 }
