@@ -1,9 +1,18 @@
 import React from "react";
 
-export const Settings = (props) => {
+import SettingsSidebar from "../Settings/SettingsSidebar";
+
+const Settings = (props) => {
   return (
-    <div className="Settings">
-      <h1>Settings</h1>
-    </div>
+    <>
+      <SettingsSidebar />
+      <div className="main-content">
+        <div className="settings">
+          <h1>Settings</h1>
+        </div>
+      </div>
+    </>
   );
 };
+
+export default Settings;

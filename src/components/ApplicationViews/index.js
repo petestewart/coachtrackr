@@ -6,6 +6,7 @@ import Clients from "../Clients";
 import Sessions from "../Sessions";
 import Sync from "../Sync";
 import CCEU from "../CCEU";
+import Settings from "../Settings";
 import Help from "../Help";
 
 import ScrollToTop from "../UI/ScrollToTop";
@@ -18,7 +19,7 @@ const ApplicationViews = (props) => {
       <Route
         exact
         path="/home"
-        render={(props) => <Home history={props.history} {...props} />}
+        render={(props) => <div className="main-content"><Home history={props.history} {...props} /></div>}
       />
 
       {/* Clients */}
@@ -26,7 +27,7 @@ const ApplicationViews = (props) => {
       <Route
         exact
         path="/clients"
-        render={(props) => <Clients history={props.history} {...props} />}
+        render={(props) => <div className="main-content"><Clients history={props.history} {...props} /></div>}
       />
 
       {/* Sessions */}
@@ -34,7 +35,7 @@ const ApplicationViews = (props) => {
       <Route
         exact
         path="/sessions"
-        render={(props) => <Sessions history={props.history} {...props} />}
+        render={(props) => <div className="main-content"><Sessions history={props.history} {...props} /></div>}
       />
 
       {/* Sync */}
@@ -42,7 +43,7 @@ const ApplicationViews = (props) => {
       <Route
         exact
         path="/sync"
-        render={(props) => <Sync history={props.history} {...props} />}
+        render={(props) => <div className="main-content"><Sync history={props.history} {...props} /></div>}
       />
 
       {/* CCEU */}
@@ -50,7 +51,15 @@ const ApplicationViews = (props) => {
       <Route
         exact
         path="/cceu"
-        render={(props) => <CCEU history={props.history} {...props} />}
+        render={(props) => <div className="main-content"><CCEU history={props.history} {...props} /></div>}
+      />
+
+      {/* Settings */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/settings"
+        render={(props) => <Settings history={props.history} {...props} />}
       />
 
       {/* Help */}
@@ -58,7 +67,7 @@ const ApplicationViews = (props) => {
       <Route
         exact
         path="/help"
-        render={(props) => <Help history={props.history} {...props} />}
+        render={(props) => <div className="main-content"><Help history={props.history} {...props} /></div>}
       />
     </>
   );
