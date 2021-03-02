@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
-import Settings from "../Settings"
+import { Link, useHistory } from "react-router-dom";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import MenuIcon from "@material-ui/icons/Menu";
+import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 
 // import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 // import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -16,11 +15,28 @@ import Collapse from "@material-ui/core/Collapse";
 const MenuExpander = () => {
   return (
     <div className="sidebar-expander">
-      <Button disableRipple >
+      <Button disableRipple>
         <MenuIcon
           fontSize="large"
           onClick={() => {
             console.log("clicked");
+          }}
+        />
+      </Button>
+    </div>
+  );
+};
+
+const BackButton = () => {
+  const history = useHistory();
+
+  return (
+    <div className="sidebar-expander">
+      <Button disableRipple>
+        <ArrowBackIosRoundedIcon
+          fontSize="large"
+          onClick={() => {
+            history.goBack();
           }}
         />
       </Button>
@@ -67,19 +83,19 @@ const SidebarItem = ({
 
   return (
     <>
-
       <ListItem
         className="sidebar-item"
         onClick={onClick}
         button
         dense
-        component={Link} to={item.route}
+        component={Link}
+        to={item.route}
         {...rest}
-        >
+      >
         <div
           style={{ paddingLeft: depth * depthStep }}
           className="sidebar-item-content"
-          >
+        >
           {Icon && <Icon className="sidebar-item-icon" fontSize="small" />}
           <div className="sidebar-item-text">{label}</div>
         </div>
@@ -108,9 +124,14 @@ const SidebarItem = ({
   );
 };
 
-const Sidebar = ({ items, depthStep, depth, expanded }) => (
+const Sidebar = ({ items, depthStep, depth, expanded, backButton }) => (
   <div className="sidebar">
-    <MenuExpander />
+    { backButton
+    ? <BackButton />
+  : <MenuExpander />
+  }
+    
+    
     {/* <Divider style={{ margin: "6px 0" }} /> */}
     <List disablePadding dense>
       {items.map((sidebarItem, index) => (
