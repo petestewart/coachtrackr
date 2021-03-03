@@ -25,7 +25,7 @@ const items = [
     name: "clients",
     label: "Clients",
     Icon: PeopleAltIcon,
-    route: "clients",
+    route: "/clients",
     items: [
       {
         name: "addClient",
@@ -54,7 +54,7 @@ const items = [
     name: "sessions",
     label: "Sessions",
     Icon: DateRangeIcon,
-    route: "sessions",
+    route: "/sessions",
     items: [
       {
         name: "addSession",
@@ -79,24 +79,33 @@ const items = [
       },
     ],
   },
-  { name: "sync", label: "Sync", Icon: SyncIcon, route:"sync" },
-  { name: "cceu", label: "CCEU", Icon: TimelineIcon, route:"cceu" },
-  { name: "settings", label: "Settings", Icon: SettingsIcon, route:"settings" },
-  { name: "help", label: "Help", Icon: HelpOutlineIcon, route:"help" },
-  "divider"
+  { name: "sync", label: "Sync", Icon: SyncIcon, route: "/sync" },
+  { name: "cceu", label: "CCEU", Icon: TimelineIcon, route: "/cceu" },
+  {
+    name: "settings",
+    label: "Settings",
+    Icon: SettingsIcon,
+    route: "/settings",
+  },
+  { name: "help", label: "Help", Icon: HelpOutlineIcon, route: "/help" },
+  "divider",
 ];
 
-const SideNav = () => {
-  const [showLabels, setShowLabels] = useState(true)
+const SideNav = (props) => {
+  // const [showLabels, setShowLabels] = useState(true)
 
   const toggleLabels = () => {
-    setShowLabels((prevState) => !prevState)
-  }
+    props.setHideNavLabels((prevState) => !prevState);
+  };
 
   return (
     <div>
-
-      <Sidebar items={items} hideLabels={!showLabels} toggleLabels={toggleLabels} />
+      <Sidebar
+        items={items}
+        activePath={props.activePath}
+        hideLabels={props.hideNavLabels}
+        toggleLabels={toggleLabels}
+      />
     </div>
   );
 };
