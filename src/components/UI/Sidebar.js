@@ -110,7 +110,7 @@ const SidebarItem = ({
                     depth={depth + 1}
                     depthStep={depthStep}
                     item={subItem}
-                    hideLabel
+                    hideLabel={hideLabel}
                   />
                 )}
               </React.Fragment>
