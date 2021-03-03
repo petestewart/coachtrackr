@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import HomeIcon from "@material-ui/icons/Home";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
@@ -31,18 +31,21 @@ const items = [
         name: "addClient",
         label: "Add new client",
         onClick,
+        static: true,
         Icon: AddCircleSharpIcon,
       },
       {
         name: "manageClients",
         label: "Manage client list",
         onClick,
+        static: true,
         Icon: EditIcon,
       },
       {
         name: "importClients",
         label: "Import client(s)",
         onClick,
+        static: true,
         Icon: CloudDownloadIcon,
       },
     ],
@@ -57,18 +60,21 @@ const items = [
         name: "addSession",
         label: "Add new session",
         onClick,
+        static: true,
         Icon: AddCircleSharpIcon,
       },
       {
         name: "manageSessions",
         label: "Manage sessions",
         onClick,
+        static: true,
         Icon: EditIcon,
       },
       {
         name: "importSessions",
         label: "Import session(s)",
         onClick,
+        static: true,
         Icon: CloudDownloadIcon,
       },
     ],
@@ -81,10 +87,16 @@ const items = [
 ];
 
 const SideNav = () => {
+  const [showLabels, setShowLabels] = useState(true)
+
+  const toggleLabels = () => {
+    setShowLabels((prevState) => !prevState)
+  }
+
   return (
     <div>
 
-      <Sidebar items={items} />
+      <Sidebar items={items} hideLabels={!showLabels} toggleLabels={toggleLabels} />
     </div>
   );
 };
