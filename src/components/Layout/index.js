@@ -22,7 +22,7 @@ const Layout = () => {
         render={(props) => {
           return (
             <div className="layout">
-              {!hideMainNav ? <SideNav hideNavLabels={hideNavLabels} setHideNavLabels={setHideNavLabels} /> : ""}
+              {!hideMainNav ? <SideNav hideNavLabels={hideNavLabels} setHideNavLabels={setHideNavLabels} activePath={location.pathname} /> : ""}
               {/* <div className={!hideMainNav ? "main-content" : ""}> */}
                 <ApplicationViews setHideMainNav={setHideMainNav} />
               {/* </div> */}

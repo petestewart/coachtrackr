@@ -30,6 +30,10 @@ code {
   min-height: 50px;
 }
 
+.sidebar-item-active {
+  color: blue;
+}
+
 .sidebar-item-content {
   white-space: nowrap;
   text-overflow: ellipsis;

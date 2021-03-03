@@ -45,6 +45,7 @@ const SidebarItem = ({
   expanded,
   item,
   hideLabel = false,
+  active,
   ...rest
 }) => {
   const [collapsed, setCollapsed] = useState(true);
@@ -90,7 +91,7 @@ const SidebarItem = ({
       >
         <div
           style={{ paddingLeft: depth * depthStep }}
-          className="sidebar-item-content"
+          className={`sidebar-item-content ${active ? 'sidebar-item-active' : ''}`}
         >
           {Icon && <Icon className="sidebar-item-icon" fontSize="small" />}
           {hideLabel ? '' : <div className="sidebar-item-text">{label}</div>}
@@ -122,7 +123,7 @@ const SidebarItem = ({
   );
 };
 
-const Sidebar = ({ items, depthStep, depth, expanded, backButton, toggleLabels, hideLabels }) => (
+const Sidebar = ({ items, depthStep, depth, expanded, backButton, toggleLabels, hideLabels, activePath }) => (
   <div className={`sidebar ${hideLabels ? '' : 'sidebar-full-width'}`}>
     {/* Top button (either menu expander or back button) */}
     {backButton ? <BackButton /> : <MenuExpander toggleLabels={toggleLabels} />}
@@ -140,6 +141,7 @@ const Sidebar = ({ items, depthStep, depth, expanded, backButton, toggleLabels, 
               expanded={expanded}
               item={sidebarItem}
               hideLabel={hideLabels}
+              active={sidebarItem.route === activePath}
             />
           )}
         </React.Fragment>
