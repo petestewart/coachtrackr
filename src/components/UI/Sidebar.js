@@ -48,17 +48,18 @@ const SidebarItem = ({
   active,
   ...rest
 }) => {
-  const [collapsed, setCollapsed] = useState(true);
   const { label, items, Icon, onClick: onClickProp } = item;
-
-  const toggleCollapse = () => {
-    setCollapsed((prevValue) => !prevValue);
-  };
+  
+  // ** collapse logic before was set to auto expand when based on active **
+  // const [collapsed, setCollapsed] = useState(true);
+  // const toggleCollapse = () => {
+  //   setCollapsed((prevValue) => !prevValue);
+  // };
 
   const onClick = (e) => {
-    if (Array.isArray(items)) {
-      toggleCollapse();
-    }
+    // if (Array.isArray(items)) {
+    //   toggleCollapse();
+    // }
     if (onClickProp) {
       onClickProp(e, item);
     }
@@ -87,11 +88,12 @@ const SidebarItem = ({
         dense
         component={item.static ? null : Link}
         to={item.route}
+        disableTouchRipple={active}
         {...rest}
       >
         <div
           style={{ paddingLeft: depth * depthStep }}
-          className={`sidebar-item-content ${active ? 'sidebar-item-active' : ''}`}
+          className={`sidebar-item-content ${active ? 'sidebar-item-active' : ''} ${depth > 0 ? 'sidebar-child-item' : ''}`}
         >
           {Icon && <Icon className="sidebar-item-icon" fontSize="small" />}
           {hideLabel ? '' : <div className="sidebar-item-text">{label}</div>}
@@ -99,7 +101,7 @@ const SidebarItem = ({
         </div>
         {/* {expandIcon} */}
       </ListItem>
-      <Collapse in={!collapsed} timeout="auto" unmountOnExit>
+      <Collapse in={active} timeout="auto" unmountOnExit>
         {Array.isArray(items) ? (
           <List disablePadding dense>
             {items.map((subItem, index) => (
