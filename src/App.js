@@ -1,11 +1,15 @@
 import React from "react";
 
-import Layout from './components/Layout';
+import Layout from "./components/Layout";
+
+import { ClientsProvider } from "./components/Clients/ClientsProvider";
 
 function App() {
   return (
     <div>
-      <Layout />
+      <ClientsProvider>
+        <Layout />
+      </ClientsProvider>
     </div>
   );
 }
