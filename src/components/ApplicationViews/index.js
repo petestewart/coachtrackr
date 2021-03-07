@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
 
 import Home from "../Home";
@@ -11,9 +11,46 @@ import Help from "../Help";
 
 import ScrollToTop from "../UI/ScrollToTop";
 
+import SideNavDrawer from "../SideNav/SideNavDrawer"
+
 const ApplicationViews = (props) => {
+  const [clientsModal, setClientsModal] = useState('')
+  const [sessionsModal, setSessionsModal] = useState('')
+
+  useEffect(() => {
+    switch (props.openModal) {
+      case 'addClient':
+      case 'manageClients':
+      case 'importClients':
+        setClientsModal(props.openModal)
+        setSessionsModal('')
+        break;
+      case 'addSession':
+      case 'manageSessions':
+      case 'importSessions':
+        setSessionsModal(props.openModal)
+        setClientsModal('')
+        break;
+      default:
+        setSessionsModal('')
+        setClientsModal('')
+    }
+  }, [props.openModal])
+
+
+
+
+
   return (
     <>
+      {/* Test */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/drawer"
+        render={(props) => <div className="main-content"><SideNavDrawer history={props.history} {...props} /></div>}
+      />
+
       {/* Home */}
       <ScrollToTop />
       <Route
@@ -27,7 +64,7 @@ const ApplicationViews = (props) => {
       <Route
         exact
         path="/clients"
-        render={(props) => <div className="main-content"><Clients history={props.history} {...props} /></div>}
+        render={(props) => <div className="main-content"><Clients history={props.history} openModal={clientsModal} {...props}  /></div>}
       />
 
       {/* Sessions */}
@@ -35,7 +72,7 @@ const ApplicationViews = (props) => {
       <Route
         exact
         path="/sessions"
-        render={(props) => <div className="main-content"><Sessions history={props.history} {...props} /></div>}
+        render={(props) => <div className="main-content"><Sessions history={props.history} openModal={sessionsModal} {...props} /></div>}
       />
 
       {/* Sync */}

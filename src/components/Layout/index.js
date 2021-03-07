@@ -8,6 +8,8 @@ const Layout = () => {
   const [hideMainNav, setHideMainNav] = useState(false);
   const [hideNavLabels, setHideNavLabels] = useState(false)
 
+  const [openModal, setOpenModal] = useState('')
+
   const location = useLocation()
 
   useEffect(() => {
@@ -16,15 +18,13 @@ const Layout = () => {
 
 
   return (
-
-
       <Route
         render={(props) => {
           return (
             <div className="layout">
-              {!hideMainNav ? <SideNav hideNavLabels={hideNavLabels} setHideNavLabels={setHideNavLabels} activePath={location.pathname} /> : ""}
+              {!hideMainNav ? <SideNav hideNavLabels={hideNavLabels} setHideNavLabels={setHideNavLabels} activePath={location.pathname} setOpenModal={setOpenModal} /> : ""}
               {/* <div className={!hideMainNav ? "main-content" : ""}> */}
-                <ApplicationViews setHideMainNav={setHideMainNav} />
+                <ApplicationViews setHideMainNav={setHideMainNav} openModal={openModal} />
               {/* </div> */}
             </div>
           );
