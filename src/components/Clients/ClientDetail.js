@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
+
+import { ClientsContext } from "./ClientsProvider";
 
 // import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
@@ -56,8 +58,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ClientDetail = ({ client, ...props }) => {
+const ClientDetail = ({ clientId, ...props }) => {
+  const { getClientById } = useContext(ClientsContext);
+
   const [editMode, setEditMode] = useState(false);
+  const [client, setClient] = useState({})
+
+  const handleChange = (e) => {
+    setClient({
+      ...client,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  useEffect(() => {
+    getClientById(clientId)
+      .then((res) => {setClient(res)})
+  }, [])
 
   const toggleEditMode = () => {
     setEditMode((prevState) => !prevState);
@@ -72,8 +89,8 @@ const ClientDetail = ({ client, ...props }) => {
           <CardHeader
             avatar={
               <Avatar>
-                {client.first_name.charAt(0)}
-                {client.last_name.charAt(0)}
+                {client.first_name && client.first_name.charAt(0)}
+                {client.last_name && client.last_name.charAt(0)}
               </Avatar>
             }
             action={
@@ -105,8 +122,8 @@ const ClientDetail = ({ client, ...props }) => {
                   <TextField
                     // fullWidth
                     helperText="First name"
-                    name="firstName"
-                    // onChange={handleChange}
+                    name="first_name"
+                    onChange={handleChange}
                     required
                     value={client.first_name}
                   />
@@ -114,8 +131,8 @@ const ClientDetail = ({ client, ...props }) => {
                   <TextField
                     // fullWidth
                     helperText="Last name"
-                    name="lastName"
-                    // onChange={handleChange}
+                    name="last_name"
+                    onChange={handleChange}
                     required
                     value={client.last_name}
                   />
@@ -140,7 +157,7 @@ const ClientDetail = ({ client, ...props }) => {
                   <TextField
                     fullWidth
                     name="phone"
-                    // onChange={handleChange}
+                    onChange={handleChange}
                     value={client.phone}
                   />
                 ) : (
@@ -157,7 +174,7 @@ const ClientDetail = ({ client, ...props }) => {
                   <TextField
                     fullWidth
                     name="email"
-                    // onChange={handleChange}
+                    onChange={handleChange}
                     value={client.email}
                   />
                 ) : (
@@ -208,7 +225,7 @@ const ClientDetail = ({ client, ...props }) => {
                   <TextField
                     fullWidth
                     name="notes"
-                    // onChange={handleChange}
+                    onChange={handleChange}
                     value={client.notes}
                   />
                 ) : (

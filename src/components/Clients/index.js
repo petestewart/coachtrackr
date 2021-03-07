@@ -53,7 +53,7 @@ const Clients = (props) => {
           <ClientDetail
             style={modalStyle}
             classes={classes.paper}
-            client={modalClient}
+            clientId={modalClient.id}
             handleClose={handleClose}
           />
           {/* {body} */}

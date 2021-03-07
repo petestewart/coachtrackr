@@ -12,10 +12,14 @@ export const ClientsProvider = (props) => {
     resolve(CLIENTS)
   })
 
+  const getClientById =(clientId) => new Promise((resolve) => {
+    resolve(CLIENTS.filter(client => client.id === clientId)[0])
+  })
+
   return (
     <ClientsContext.Provider
       value={{
-        getClients,
+        getClients,getClientById
       }}
     >
       {props.children}
