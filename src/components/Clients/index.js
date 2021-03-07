@@ -30,6 +30,7 @@ const Clients = (props) => {
     paper: {
       position: "absolute",
       minWidth: 500,
+      maxWidth: 1000,
       width: "70%",
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
@@ -40,24 +41,6 @@ const Clients = (props) => {
 
   const ClientModal = (props) => {
     const classes = useStyles();
-    // const [open, setOpen] = useState(false);
-
-    // const handleOpen = () => {
-    //   setOpen(true);
-    // };
-
-    // const handleClose = () => {
-    //   setOpen(false);
-    // };
-
-    // const body = (
-    //   <div style={modalStyle} className={classes.paper}>
-    //     <h2 id="simple-modal-title">{modalClient.first_name} {modalClient.last_name}</h2>
-    //     <p id="simple-modal-description">
-    //       Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-    //     </p>
-    //   </div>
-    // );
 
     return (
       <div>
@@ -81,8 +64,6 @@ const Clients = (props) => {
 
   const [clients, setClients] = useState([]);
 
-  // const [open, setOpen] = React.useState(false);
-
   const { getClients } = useContext(ClientsContext);
 
   useEffect(() => {
@@ -90,10 +71,6 @@ const Clients = (props) => {
       setClients(res);
     });
   });
-
-  // const showModal = (clientId) => {
-  //   setOpen(true);
-  // };
 
   return (
     <div className="Clients">
@@ -112,7 +89,6 @@ const Clients = (props) => {
             client.upcomingSessions && client.upcomingSessions.length
           }
           pastSessions={client.pastSessions}
-          // open={open}
         />
       ))}
 

@@ -12,6 +12,7 @@ import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 // import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import Collapse from "@material-ui/core/Collapse";
 
+
 const MenuExpander = (props) => {
   return (
     <div className="sidebar-expander">
@@ -49,7 +50,7 @@ const SidebarItem = ({
   ...rest
 }) => {
   const { label, items, Icon, onClick: onClickProp } = item;
-  
+
   // ** collapse logic before was set to auto expand when based on active **
   // const [collapsed, setCollapsed] = useState(true);
   // const toggleCollapse = () => {
@@ -93,11 +94,12 @@ const SidebarItem = ({
       >
         <div
           style={{ paddingLeft: depth * depthStep }}
-          className={`sidebar-item-content ${active ? 'sidebar-item-active' : ''} ${depth > 0 ? 'sidebar-child-item' : ''}`}
+          className={`sidebar-item-content ${
+            active ? "sidebar-item-active" : ""
+          } ${depth > 0 ? "sidebar-child-item" : ""}`}
         >
           {Icon && <Icon className="sidebar-item-icon" fontSize="small" />}
-          {hideLabel ? '' : <div className="sidebar-item-text">{label}</div>}
-          
+          {hideLabel ? "" : <div className="sidebar-item-text">{label}</div>}
         </div>
         {/* {expandIcon} */}
       </ListItem>
@@ -125,31 +127,48 @@ const SidebarItem = ({
   );
 };
 
-const Sidebar = ({ items, depthStep, depth, expanded, backButton, toggleLabels, hideLabels, activePath }) => (
-  <div className={`sidebar ${hideLabels ? '' : 'sidebar-full-width'}`}>
-    {/* Top button (either menu expander or back button) */}
-    {backButton ? <BackButton /> : <MenuExpander toggleLabels={toggleLabels} />}
+const Sidebar = ({
+  items,
+  depthStep,
+  depth,
+  expanded,
+  backButton,
+  toggleLabels,
+  hideLabels,
+  activePath,
+}) => {
 
-    {/* Menu list */}
-    <List disablePadding dense>
-      {items.map((sidebarItem, index) => (
-        <React.Fragment key={`${sidebarItem.name}${index}`}>
-          {sidebarItem === "divider" ? (
-            <Divider style={{ margin: "6px 0" }} />
-          ) : (
-            <SidebarItem
-              depthStep={depthStep}
-              depth={depth}
-              expanded={expanded}
-              item={sidebarItem}
-              hideLabel={hideLabels}
-              active={sidebarItem.route === activePath}
-            />
-          )}
-        </React.Fragment>
-      ))}
-    </List>
-  </div>
-);
+
+  return (
+    <div className={`sidebar ${hideLabels ? "" : "sidebar-full-width"}`}>
+      {/* Top button (either menu expander or back button) */}
+      {backButton ? (
+        <BackButton />
+      ) : (
+        <MenuExpander toggleLabels={toggleLabels} />
+      )}
+
+      {/* Menu list */}
+      <List disablePadding dense>
+        {items.map((sidebarItem, index) => (
+          <React.Fragment key={`${sidebarItem.name}${index}`}>
+            {sidebarItem === "divider" ? (
+              <Divider style={{ margin: "6px 0" }} />
+            ) : (
+              <SidebarItem
+                depthStep={depthStep}
+                depth={depth}
+                expanded={expanded}
+                item={sidebarItem}
+                hideLabel={hideLabels}
+                active={sidebarItem.route === activePath}
+              />
+            )}
+          </React.Fragment>
+        ))}
+      </List>
+    </div>
+  );
+};
 
 export default Sidebar;

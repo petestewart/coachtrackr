@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
 
 // import Box from "@material-ui/core/Box";
@@ -15,25 +15,18 @@ import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import EventIcon from "@material-ui/icons/Event";
 import NotesIcon from "@material-ui/icons/Notes";
 
-import clsx from 'clsx';
-
 import {
-  Box,
-  Button,
+  Grid,
+  makeStyles,
+  Typography,
   Card,
   CardContent,
   CardHeader,
-  Divider,
-  Grid,
-  Paper,
+  CardActions,
   TextField,
-  makeStyles,
-  Typography
-} from '@material-ui/core';
-
-// import Modal from '@material-ui/core/Modal';
-// import Backdrop from '@material-ui/core/Backdrop';
-// import Fade from '@material-ui/core/Fade';
+  Button,
+  ButtonGroup,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,263 +45,201 @@ const useStyles = makeStyles((theme) => ({
   infoArea: {
     display: "flex",
     alignItems: "center",
-    margin: 15
+    margin: 15,
   },
   icon: {
     // padding: theme.spacing(2),
-    textAlign: 'center',
-    border: 'none',
-    dropShadow: 'none'
+    textAlign: "center",
+    border: "none",
+    dropShadow: "none",
     // color: theme.palette.text.secondary,
   },
 }));
 
 const ClientDetail = ({ client, ...props }) => {
-  const classes = useStyles();
+  const [editMode, setEditMode] = useState(false);
 
-  // const handleChange = (event) => {
-  //   setValues({
-  //     ...values,
-  //     [event.target.name]: event.target.value
-  //   });
-  // };
+  const toggleEditMode = () => {
+    setEditMode((prevState) => !prevState);
+  };
 
-  // return (
-  //   <form
-  //     autoComplete="off"
-  //     noValidate
-  //     // className={clsx(classes.root, className)}
-  //     // {...rest}
-  //   >
-  //     <Card>
-  //       <CardHeader
-  //         subheader="The information can be edited"
-  //         title="Profile"
-  //       />
-  //       <Divider />
-  //       <CardContent>
-  //         <Grid
-  //           container
-  //           spacing={3}
-  //         >
-  //           <Grid
-  //             item
-  //             md={6}
-  //             xs={12}
-  //           >
-  //             {/* <TextField
-  //               fullWidth
-  //               helperText="Please specify the first name"
-  //               label="First name"
-  //               name="firstName"
-  //               onChange={handleChange}
-  //               required
-  //               value={values.firstName}
-  //               variant="outlined"
-  //             /> */}
-  //             First Name
-  //           </Grid>
-  //           <Grid
-  //             item
-  //             md={6}
-  //             xs={12}
-  //           >
-  //             {/* <TextField
-  //               fullWidth
-  //               label="Last name"
-  //               name="lastName"
-  //               onChange={handleChange}
-  //               required
-  //               value={values.lastName}
-  //               variant="outlined"
-  //             /> */}
-  //             Last Name
-  //           </Grid>
-  //           <Grid
-  //             item
-  //             md={6}
-  //             xs={12}
-  //           >
-  //             {/* <TextField
-  //               fullWidth
-  //               label="Email Address"
-  //               name="email"
-  //               onChange={handleChange}
-  //               required
-  //               value={values.email}
-  //               variant="outlined"
-  //             /> */}
-  //             Emails
-  //           </Grid>
-  //           <Grid
-  //             item
-  //             md={6}
-  //             xs={12}
-  //           >
-  //             {/* <TextField
-  //               fullWidth
-  //               label="Phone Number"
-  //               name="phone"
-  //               onChange={handleChange}
-  //               type="number"
-  //               value={values.phone}
-  //               variant="outlined"
-  //             /> */}
-  //             Phone
-  //           </Grid>
-  //           <Grid
-  //             item
-  //             md={6}
-  //             xs={12}
-  //           >
-  //             {/* <TextField
-  //               fullWidth
-  //               label="Country"
-  //               name="country"
-  //               onChange={handleChange}
-  //               required
-  //               value={values.country}
-  //               variant="outlined"
-  //             /> */}
-  //             Unused sessions
-  //           </Grid>
-  //           <Grid
-  //             item
-  //             md={6}
-  //             xs={12}
-  //           >
-  //             {/* <TextField
-  //               fullWidth
-  //               label="Country"
-  //               name="country"
-  //               onChange={handleChange}
-  //               required
-  //               value={values.country}
-  //               variant="outlined"
-  //             /> */}
-  //             Upcoming sessions
-  //           </Grid>
-  //           <Grid
-  //             item
-  //             md={6}
-  //             xs={12}
-  //           >
-  //             {/* <TextField
-  //               fullWidth
-  //               label="Country"
-  //               name="country"
-  //               onChange={handleChange}
-  //               required
-  //               value={values.country}
-  //               variant="outlined"
-  //             /> */}
-  //             Notes
-  //           </Grid>
-  //         </Grid>
-  //       </CardContent>
-  //       <Divider />
-  //       <Box
-  //         display="flex"
-  //         justifyContent="flex-end"
-  //         p={2}
-  //       >
-  //         <Button
-  //           color="primary"
-  //           variant="contained"
-  //         >
-  //           Save details
-  //         </Button>
-  //       </Box>
-  //     </Card>
-  //   </form>
-  // );
+  // const classes = useStyles();
 
-
-  // eslint-disable-next-line no-unreachable
   return (
     <div style={props.style} className={props.classes}>
-      <div className={classes.root}>
-        <div className={classes.header}>
-          <Avatar>HH</Avatar>
-          <h2 id="simple-modal-title">
-            {client.first_name} {client.last_name}
-          </h2>
-          <div className="buttonsGroup">
-            <IconButton aria-label="edit">
-              <EditIcon />
-            </IconButton>
-            <IconButton aria-label="menu">
-              <MoreVertIcon />
-            </IconButton>
-            <IconButton aria-label="cancel" onClick={props.handleClose}>
-              <CloseIcon />
-            </IconButton>
-          </div>
-        </div>
-      </div>
-      <Grid container spacing={2}>
+      <form>
+        <Card>
+          <CardHeader
+            avatar={
+              <Avatar>
+                {client.first_name.charAt(0)}
+                {client.last_name.charAt(0)}
+              </Avatar>
+            }
+            action={
+              <div className="buttonsGroup">
+                <IconButton
+                  aria-label="edit"
+                  onClick={toggleEditMode}
+                  style={
+                    editMode ? { color: "blue", backgroundColor: "grey" } : {}
+                  }
+                >
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="menu"
+                  disabled={editMode ? true : false}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+                <IconButton aria-label="cancel" onClick={props.handleClose}>
+                  <CloseIcon />
+                </IconButton>
+              </div>
+            }
+            // title={`${client.first_name} ${client.last_name}`}
+            title={
+              editMode ? (
+                <>
+                  <TextField
+                    // fullWidth
+                    helperText="First name"
+                    name="firstName"
+                    // onChange={handleChange}
+                    required
+                    value={client.first_name}
+                  />
+                  {"  "}
+                  <TextField
+                    // fullWidth
+                    helperText="Last name"
+                    name="lastName"
+                    // onChange={handleChange}
+                    required
+                    value={client.last_name}
+                  />
+                </>
+              ) : (
+                `${client.first_name} ${client.last_name}`
+              )
+            }
+            style={{ textAlign: "center" }}
+            titleTypographyProps={{ variant: "h4" }}
+          />
 
-      {/* <div className={classes.infoArea}> */}
-        <Grid item xs={1}></Grid>
-        
-        <Grid item xs={"auto"} >
-          {/* <Paper className={classes.icon}> */}
-          <PhoneIcon /> 
-          {/* </Paper> */}
-        </Grid>
-        <Grid item xs={10}>
-          {client.phone}
-        </Grid>
-        <Grid item xs={1}></Grid>
-        
-        <Grid item xs={"auto"} >
-          {/* <Paper className={classes.icon}> */}
-          <EmailIcon /> 
-          {/* </Paper> */}
-        </Grid>
-        <Grid item xs={10}>
-          {client.email}
-        </Grid>
-        <Grid item xs={1}></Grid>
-        
-        <Grid item xs={"auto"} >
-          {/* <Paper className={classes.icon}> */}
-          <AttachMoneyIcon /> 
-          {/* </Paper> */}
-        </Grid>
-        <Grid item xs={10}>
-        5 unused paid sessions
-        </Grid>
-        <Grid item xs={1}></Grid>
-        
-        <Grid item xs={"auto"} >
-          {/* <Paper className={classes.icon}> */}
-          <EventIcon /> 
-          {/* </Paper> */}
-        </Grid>
-        <Grid item xs={10}>
-        {client.upcomingSessions ? client.upcomingSessions.length : 'No'} upcoming sessions
-        {client.upcomingSessions 
-        
-        ? <Typography variant={"subtitle2"}>
-        
-        {client.upcomingSessions.map((session) =>{ 
-          return `${session.date}, `})}
-        </Typography>
-        : 'No'} 
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={1}></Grid>
 
-        </Grid>
-        <Grid item xs={1}></Grid>
-        
-        <Grid item xs={"auto"} >
-          {/* <Paper className={classes.icon}> */}
-          <NotesIcon /> 
-          {/* </Paper> */}
-        </Grid>
-        <Grid item xs={10}>
-          {client.notes}
-        </Grid>
-      </Grid>
+              <Grid item xs={"auto"}>
+                <PhoneIcon />
+              </Grid>
+              <Grid item xs={10}>
+                {editMode ? (
+                  <TextField
+                    fullWidth
+                    name="phone"
+                    // onChange={handleChange}
+                    value={client.phone}
+                  />
+                ) : (
+                  client.phone
+                )}
+              </Grid>
+              <Grid item xs={1}></Grid>
+
+              <Grid item xs={"auto"}>
+                <EmailIcon />
+              </Grid>
+              <Grid item xs={10}>
+                {editMode ? (
+                  <TextField
+                    fullWidth
+                    name="email"
+                    // onChange={handleChange}
+                    value={client.email}
+                  />
+                ) : (
+                  client.email
+                )}
+              </Grid>
+              <Grid item xs={1}></Grid>
+
+              {editMode ? (
+                ""
+              ) : (
+                <>
+                  <Grid item xs={"auto"}>
+                    <AttachMoneyIcon />
+                  </Grid>
+                  <Grid item xs={10}>
+                    5 unused paid sessions
+                  </Grid>
+                  <Grid item xs={1}></Grid>
+
+                  <Grid item xs={"auto"}>
+                    <EventIcon />
+                  </Grid>
+                  <Grid item xs={10}>
+                    {client.upcomingSessions
+                      ? client.upcomingSessions.length
+                      : "No"}{" "}
+                    upcoming sessions
+                    {client.upcomingSessions ? (
+                      <Typography variant={"subtitle2"}>
+                        {client.upcomingSessions.map((session) => {
+                          return `${session.date}, `;
+                        })}
+                      </Typography>
+                    ) : (
+                      "No"
+                    )}
+                  </Grid>
+                  <Grid item xs={1}></Grid>
+                </>
+              )}
+
+              <Grid item xs={"auto"}>
+                <NotesIcon />
+              </Grid>
+              <Grid item xs={10}>
+                {editMode ? (
+                  <TextField
+                    fullWidth
+                    name="notes"
+                    // onChange={handleChange}
+                    value={client.notes}
+                  />
+                ) : (
+                  client.notes
+                )}
+              </Grid>
+            </Grid>
+
+            <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
+              {editMode ? (
+                <>
+                  <Button color="primary" variant="contained">
+                    Save
+                  </Button>
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => {
+                      setEditMode(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                ""
+              )}
+            </CardActions>
+          </CardContent>
+        </Card>
+      </form>
     </div>
   );
 };
