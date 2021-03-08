@@ -1,25 +1,18 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
-
-import { ClientsContext } from "./ClientsProvider";
 
 // import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 
 import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CloseIcon from "@material-ui/icons/Close";
 import PersonIcon from "@material-ui/icons/Person";
 import PhoneIcon from "@material-ui/icons/Phone";
 import EmailIcon from "@material-ui/icons/Email";
-import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
-import EventIcon from "@material-ui/icons/Event";
 import NotesIcon from "@material-ui/icons/Notes";
 
 import {
   Grid,
-  makeStyles,
   Checkbox,
   Card,
   CardContent,
@@ -27,40 +20,11 @@ import {
   CardActions,
   TextField,
   Button,
-  ButtonGroup,
   FormControlLabel,
   RadioGroup,
   Radio,
-  Box,
 } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-  header: {
-    display: "flex",
-    alignContent: "center",
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  infoArea: {
-    display: "flex",
-    alignItems: "center",
-    margin: 15,
-  },
-  icon: {
-    // padding: theme.spacing(2),
-    textAlign: "center",
-    border: "none",
-    dropShadow: "none",
-    // color: theme.palette.text.secondary,
-  },
-}));
 
 const CreateClient = ({ clientId, ...props }) => {
   const [client, setClient] = useState({
@@ -83,6 +47,14 @@ const CreateClient = ({ clientId, ...props }) => {
     setClient({
       ...client,
       [e.target.name]: e.target.checked,
+    });
+  };
+
+  const handleRadio = (e) => {
+    console.log(e.target.value)
+    setClient({
+      ...client,
+      [e.target.name]: e.target.value === "true",
     });
   };
 
@@ -122,7 +94,7 @@ const CreateClient = ({ clientId, ...props }) => {
                     row
                     aria-label="isGroup1"
                     name="isGroup"
-                    onChange={handleChange}
+                    onChange={handleRadio}
                     value={client.isGroup}
                   >
                     <FormControlLabel
