@@ -10,7 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CloseIcon from "@material-ui/icons/Close";
-
+import PersonIcon from "@material-ui/icons/Person";
 import PhoneIcon from "@material-ui/icons/Phone";
 import EmailIcon from "@material-ui/icons/Email";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
@@ -20,7 +20,7 @@ import NotesIcon from "@material-ui/icons/Notes";
 import {
   Grid,
   makeStyles,
-  Typography,
+  Checkbox,
   Card,
   CardContent,
   CardHeader,
@@ -28,6 +28,10 @@ import {
   TextField,
   Button,
   ButtonGroup,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+  Box,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -59,25 +63,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreateClient = ({ clientId, ...props }) => {
-  const { getClientById } = useContext(ClientsContext);
-
-  const [editMode, setEditMode] = useState(false);
-  const [client, setClient] = useState({})
+  const [client, setClient] = useState({
+    first_name: "",
+    last_name: "",
+    phone: "",
+    email: "",
+    isCurrent: true,
+    isGroup: false
+  });
 
   const handleChange = (e) => {
     setClient({
       ...client,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  useEffect(() => {
-    getClientById(clientId)
-      .then((res) => {setClient(res)})
-  }, [])
-
-  const toggleEditMode = () => {
-    setEditMode((prevState) => !prevState);
+  const handleChecked = (e) => {
+    setClient({
+      ...client,
+      [e.target.name]: e.target.checked,
+    });
   };
 
   // const classes = useStyles();
@@ -88,171 +94,146 @@ const CreateClient = ({ clientId, ...props }) => {
         <Card>
           <CardHeader
             avatar={
-              <Avatar>
-                {client.first_name && client.first_name.charAt(0)}
-                {client.last_name && client.last_name.charAt(0)}
-              </Avatar>
-            }
-            action={
-              <div className="buttonsGroup">
-                <IconButton
-                  aria-label="edit"
-                  onClick={toggleEditMode}
-                  style={
-                    editMode ? { color: "blue", backgroundColor: "grey" } : {}
-                  }
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  aria-label="menu"
-                  disabled={editMode ? true : false}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-                <IconButton aria-label="cancel" onClick={props.handleClose}>
-                  <CloseIcon />
-                </IconButton>
-              </div>
-            }
-            // title={`${client.first_name} ${client.last_name}`}
-            title={
-              editMode ? (
-                <>
-                  <TextField
-                    // fullWidth
-                    helperText="First name"
-                    name="first_name"
-                    onChange={handleChange}
-                    required
-                    value={client.first_name}
-                  />
-                  {"  "}
-                  <TextField
-                    // fullWidth
-                    helperText="Last name"
-                    name="last_name"
-                    onChange={handleChange}
-                    required
-                    value={client.last_name}
-                  />
-                </>
+              client.first_name && client.last_name ? (
+                <Avatar>
+                  {client.first_name && client.first_name.charAt(0)}
+                  {client.last_name && client.last_name.charAt(0)}
+                </Avatar>
               ) : (
-                `${client.first_name} ${client.last_name}`
+                ""
               )
             }
+            action={
+              <IconButton aria-label="cancel" onClick={props.handleClose}>
+                <CloseIcon />
+              </IconButton>
+            }
+            // title={`${client.first_name} ${client.last_name}`}
+            title={"Add New Client"}
             style={{ textAlign: "center" }}
             titleTypographyProps={{ variant: "h4" }}
           />
 
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item xs={1}></Grid>
+              <Grid item xs={12}>
+                <Grid container justify="center" spacing={3}>
+                  <RadioGroup
+                    row
+                    aria-label="isGroup1"
+                    name="isGroup"
+                    onChange={handleChange}
+                    value={client.isGroup}
+                  >
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio color="primary" />}
+                      label="Individual"
+                    />
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio color="primary" />}
+                      label="Group"
+                    />
+                  </RadioGroup>
+                </Grid>
+              </Grid>
 
-              <Grid item xs={"auto"}>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={1}>
+                <PersonIcon />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  fullWidth
+                  name="first_name"
+                  onChange={handleChange}
+                  value={client.first_name}
+                  label={"First name"}
+                  required
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  name="last_name"
+                  onChange={handleChange}
+                  value={client.last_name}
+                  label={"Last name"}
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={1}></Grid>
+              <Grid item xs={1}>
                 <PhoneIcon />
               </Grid>
               <Grid item xs={10}>
-                {editMode ? (
-                  <TextField
-                    fullWidth
-                    name="phone"
-                    onChange={handleChange}
-                    value={client.phone}
-                  />
-                ) : (
-                  client.phone
-                )}
+                <TextField
+                  fullWidth
+                  name="phone"
+                  onChange={handleChange}
+                  value={client.phone}
+                  label={"Phone number"}
+                />
               </Grid>
-              <Grid item xs={1}></Grid>
 
-              <Grid item xs={"auto"}>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={1}>
                 <EmailIcon />
               </Grid>
               <Grid item xs={10}>
-                {editMode ? (
-                  <TextField
-                    fullWidth
-                    name="email"
-                    onChange={handleChange}
-                    value={client.email}
-                  />
-                ) : (
-                  client.email
-                )}
+                <TextField
+                  fullWidth
+                  name="email"
+                  onChange={handleChange}
+                  value={client.email}
+                  label={"Email address"}
+                />
               </Grid>
+
+              <Grid item xs={2}></Grid>
+              <Grid item xs={10}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={client.isCurrent}
+                      onChange={handleChecked}
+                      name="isCurrent"
+                    />
+                  }
+                  label="Current client"
+                />
+              </Grid>
+
               <Grid item xs={1}></Grid>
-
-              {editMode ? (
-                ""
-              ) : (
-                <>
-                  <Grid item xs={"auto"}>
-                    <AttachMoneyIcon />
-                  </Grid>
-                  <Grid item xs={10}>
-                    5 unused paid sessions
-                  </Grid>
-                  <Grid item xs={1}></Grid>
-
-                  <Grid item xs={"auto"}>
-                    <EventIcon />
-                  </Grid>
-                  <Grid item xs={10}>
-                    {client.upcomingSessions
-                      ? client.upcomingSessions.length
-                      : "No"}{" "}
-                    upcoming sessions
-                    {client.upcomingSessions ? (
-                      <Typography variant={"subtitle2"}>
-                        {client.upcomingSessions.map((session) => {
-                          return `${session.date}, `;
-                        })}
-                      </Typography>
-                    ) : (
-                      "No"
-                    )}
-                  </Grid>
-                  <Grid item xs={1}></Grid>
-                </>
-              )}
-
-              <Grid item xs={"auto"}>
+              <Grid item xs={1}>
                 <NotesIcon />
               </Grid>
               <Grid item xs={10}>
-                {editMode ? (
-                  <TextField
-                    fullWidth
-                    name="notes"
-                    onChange={handleChange}
-                    value={client.notes}
-                  />
-                ) : (
-                  client.notes
-                )}
+                <TextField
+                  fullWidth
+                  name="notes"
+                  onChange={handleChange}
+                  value={client.notes}
+                  label={"Notes"}
+                />
               </Grid>
             </Grid>
 
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
-              {editMode ? (
-                <>
-                  <Button color="primary" variant="contained">
-                    Save
-                  </Button>
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    onClick={() => {
-                      setEditMode(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </>
-              ) : (
-                ""
-              )}
+              <>
+                <Button color="primary" variant="contained">
+                  Save
+                </Button>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={props.cancel}
+                >
+                  Cancel
+                </Button>
+              </>
             </CardActions>
           </CardContent>
         </Card>
