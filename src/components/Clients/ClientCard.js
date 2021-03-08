@@ -1,10 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
+import Checkbox from "@material-ui/core/Checkbox";
 
-import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles({
   root: {
@@ -26,15 +28,22 @@ const ClientCard = (props) => {
 
   return (
     <Card className={classes.root}>
-      <CardActionArea onClick={props.onClick}>
-      <CardContent>
-        <Typography className={classes.title}  gutterBottom>
-          {`${props.firstName} ${props.lastName}`}
-        </Typography>
-        <Typography className={classes.subtitle} color="textSecondary">
-          {`${props.futureSessions} upcoming sessions, ${props.pastSessions} past sessions`}
-        </Typography>
-      </CardContent>
+      <CardActionArea onClick={props.onClick} disableRipple={props.manageMode}>
+        <CardContent>
+          <Grid container>
+            <Grid item>
+              {props.manageMode ? <Checkbox checked={props.selected} /> : ""}
+            </Grid>
+            <Grid item>
+              <Typography className={classes.title} gutterBottom>
+                {`${props.firstName} ${props.lastName}`}
+              </Typography>
+              <Typography className={classes.subtitle} color="textSecondary">
+                {`${props.futureSessions} upcoming sessions, ${props.pastSessions} past sessions`}
+              </Typography>
+            </Grid>
+          </Grid>
+        </CardContent>
       </CardActionArea>
     </Card>
   );
