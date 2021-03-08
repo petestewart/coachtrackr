@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 import ClientCard from "./ClientCard";
 import ClientDetail from "./ClientDetail";
@@ -13,7 +15,7 @@ const Clients = (props) => {
   const [activeModal, setActiveModal] = useState("");
   const [modalClient, setModalClient] = useState({});
   const [manageMode, setManageMode] = useState(false);
-  const [selected, setSelected] = useState([])
+  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     if (props.openModal) {
@@ -39,13 +41,13 @@ const Clients = (props) => {
   };
 
   const handleSelect = (clientId) => {
-    const currentSelected = [...selected]
+    const currentSelected = [...selected];
     if (currentSelected.includes(clientId)) {
-      setSelected(currentSelected.filter((i) => i !== clientId))
+      setSelected(currentSelected.filter((i) => i !== clientId));
     } else {
-      setSelected([...currentSelected, clientId])
+      setSelected([...currentSelected, clientId]);
     }
-  }
+  };
 
   const modalStyle = {
     top: "50%",
@@ -117,13 +119,48 @@ const Clients = (props) => {
   return (
     <div className="Clients">
       <h1>Clients</h1>
+      {manageMode ? (
+        <>
+          <ButtonGroup
+            color="primary"
+            aria-label="outlined primary button group"
+          >
+            <Button
+              onClick={() => {
+                setSelected(clients.map((client) => client.id));
+              }}
+            >
+              Select All
+            </Button>
+            <Button
+              onClick={() => {
+                setSelected([]);
+              }}
+            >
+              Select None
+            </Button>
+            <Button
+              onClick={() => {
+                setSelected([]);
+                handleClose();
+              }}
+            >
+              Cancel
+            </Button>
+          </ButtonGroup>
+          <br />
+          {`${selected.length} clients selected`}
+        </>
+      ) : (
+        ""
+      )}
       <ClientModal firstName={"Pete"} />
       {clients.map((client, index) => (
         <ClientCard
           key={index}
           onClick={() => {
             if (manageMode) {
-              handleSelect(client.id)
+              handleSelect(client.id);
             } else {
               setModalClient(client);
               setActiveModal("clientDetail");
