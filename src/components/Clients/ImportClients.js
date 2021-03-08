@@ -173,6 +173,7 @@ const ImportClients = ({ clientId, ...props }) => {
                   label={"Notes"}
                 />
               </Grid> */}
+              
             </Grid>
 
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
