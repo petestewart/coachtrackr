@@ -8,6 +8,7 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import ClientCard from "./ClientCard";
 import ClientDetail from "./ClientDetail";
 import CreateClient from "./CreateClient";
+import ImportClients from "./ImportClients";
 
 import { ClientsContext } from "./ClientsProvider";
 
@@ -82,6 +83,14 @@ const Clients = (props) => {
       ),
       addClient: (
         <CreateClient
+          style={modalStyle}
+          classes={classes.paper}
+          clientId={modalClient.id}
+          handleClose={handleClose}
+        />
+      ),
+      importClients: (
+        <ImportClients
           style={modalStyle}
           classes={classes.paper}
           clientId={modalClient.id}
