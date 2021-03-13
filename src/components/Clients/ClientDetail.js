@@ -59,22 +59,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ClientDetail = ({ clientId, ...props }) => {
-  const { getClientById } = useContext(ClientsContext);
+  const { getClientById, updateClient } = useContext(ClientsContext);
 
   const [editMode, setEditMode] = useState(false);
-  const [client, setClient] = useState({})
+  const [client, setClient] = useState({});
 
   const handleChange = (e) => {
     setClient({
       ...client,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleUpdate = () => {
+    updateClient(client);
+    setClient({})
+  };
 
   useEffect(() => {
-    getClientById(clientId)
-      .then((res) => {setClient(res)})
-  }, [])
+    getClientById(clientId).then((res) => {
+      setClient(res);
+    });
+  }, []);
 
   const toggleEditMode = () => {
     setEditMode((prevState) => !prevState);
@@ -237,7 +243,11 @@ const ClientDetail = ({ clientId, ...props }) => {
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
               {editMode ? (
                 <>
-                  <Button color="primary" variant="contained">
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={handleUpdate}
+                  >
                     Save
                   </Button>
                   <Button

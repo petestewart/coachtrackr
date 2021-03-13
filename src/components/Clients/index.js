@@ -23,10 +23,20 @@ import { ClientsContext } from "./ClientsProvider";
 
 const Clients = (props) => {
   const [searchValue, setSearchValue] = useState("");
+  const [sortBy, setSortBy] = useState("AtoZ");
   const [activeModal, setActiveModal] = useState("");
   const [modalClient, setModalClient] = useState({});
   const [manageMode, setManageMode] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [clients, setClients] = useState([]);
+
+  const { getClients, createClient, allClients } = useContext(ClientsContext);
+
+  useEffect(() => {
+    if (allClients) {
+      setClients(allClients);
+    }
+  }, [allClients]);
 
   useEffect(() => {
     if (props.openModal) {
@@ -41,10 +51,6 @@ const Clients = (props) => {
       setManageMode(false);
     }
   }, [props.openModal]);
-
-  // const handleOpen = () => {
-  //   setOpenModal(true);
-  // };
 
   const handleClose = () => {
     setActiveModal("");
@@ -62,6 +68,15 @@ const Clients = (props) => {
 
   const handleSearch = (e) => {
     setSearchValue((prevState) => e.target.value);
+  };
+
+  // const createNewClient = (newClient) => {
+  //   createClient(newClient);
+  // };
+
+  const createNewClient = (newClient) => {
+    createClient(newClient);
+    setActiveModal("");
   };
 
   const modalStyle = {
@@ -101,6 +116,7 @@ const Clients = (props) => {
           classes={classes.paper}
           clientId={modalClient.id}
           handleClose={handleClose}
+          handleCreateClient={createNewClient}
         />
       ),
       importClients: (
@@ -129,23 +145,30 @@ const Clients = (props) => {
     );
   };
 
-  const [clients, setClients] = useState([]);
-
-  const { getClients } = useContext(ClientsContext);
-
-  useEffect(() => {
-    getClients().then((res) => {
-      setClients(res);
-    });
-  }, []);
-
   return (
     <div className="Clients">
       <h1>Clients</h1>
       <div className="info-bar">
         <Grid container alignItems="center">
           <Grid item xs={5} alignItems="center">
-            <Typography>{clients.length} clients</Typography>
+            <Typography>
+              {searchValue
+                ? `showing ${
+                    clients.filter((client) => {
+                      if (
+                        `${client.first_name} ${client.last_name}`
+                          .toLowerCase()
+                          .includes(searchValue.toLowerCase())
+                      )
+                        return true;
+                      else {
+                        return false;
+                      }
+                    }).length
+                  }
+                  of ${clients.length} clients`
+                : `${clients.length} clients`}
+            </Typography>
           </Grid>
           <Grid item xs={4} alignItems="center">
             <Typography>
@@ -165,10 +188,6 @@ const Clients = (props) => {
         <SearchIcon />
         <InputBase
           placeholder="Search…"
-          // classes={{
-          //   root: classes.inputRoot,
-          //   input: classes.inputInput,
-          // }}
           inputProps={{ "aria-label": "search" }}
           value={searchValue}
           onChange={handleSearch}
@@ -209,35 +228,37 @@ const Clients = (props) => {
       ) : (
         ""
       )}
-      <ClientModal firstName={"Pete"} />
-      {clients.map((client, index) =>
-        searchValue &&
-        !`${client.first_name} ${client.last_name}`
-          .toLowerCase()
-          .includes(searchValue.toLowerCase()) ? (
-          ""
-        ) : (
-          <ClientCard
-            key={index}
-            onClick={() => {
-              if (manageMode) {
-                handleSelect(client.id);
-              } else {
-                setModalClient(client);
-                setActiveModal("clientDetail");
+      <ClientModal />
+      {clients
+        .sort((a, b) => (a.first_name > b.first_name ? 1 : -1))
+        .map((client, index) =>
+          searchValue &&
+          !`${client.first_name} ${client.last_name}`
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()) ? (
+            ""
+          ) : (
+            <ClientCard
+              key={index}
+              onClick={() => {
+                if (manageMode) {
+                  handleSelect(client.id);
+                } else {
+                  setModalClient(client);
+                  setActiveModal("clientDetail");
+                }
+              }}
+              firstName={client.first_name}
+              lastName={client.last_name}
+              futureSessions={
+                client.upcomingSessions && client.upcomingSessions.length
               }
-            }}
-            firstName={client.first_name}
-            lastName={client.last_name}
-            futureSessions={
-              client.upcomingSessions && client.upcomingSessions.length
-            }
-            pastSessions={client.pastSessions}
-            manageMode={manageMode}
-            selected={selected.includes(client.id)}
-          />
-        )
-      )}
+              pastSessions={client.pastSessions}
+              manageMode={manageMode}
+              selected={selected.includes(client.id)}
+            />
+          )
+        )}
     </div>
   );
 };
