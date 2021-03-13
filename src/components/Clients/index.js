@@ -123,7 +123,7 @@ const Clients = (props) => {
     getClients().then((res) => {
       setClients(res);
     });
-  });
+  }, []);
 
   return (
     <div className="Clients">

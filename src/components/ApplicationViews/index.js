@@ -39,10 +39,8 @@ const ApplicationViews = (props) => {
 
 
   const handleCloseModal = () => {
-    console.log('hi from AppViews')
     props.setOpenModal('')
   }
-
 
   return (
     <>
@@ -75,7 +73,7 @@ const ApplicationViews = (props) => {
       <Route
         exact
         path="/sessions"
-        render={(props) => <div className="main-content"><Sessions history={props.history} openModal={sessionsModal} handleCloseModal={props.handleCloseModal} setOpenModal={props.setOpenModal} {...props} /></div>}
+        render={(props) => <div className="main-content"><Sessions history={props.history} openModal={sessionsModal} handleCloseModal={handleCloseModal} {...props} /></div>}
       />
 
       {/* Sync */}
