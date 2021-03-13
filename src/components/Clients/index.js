@@ -223,7 +223,15 @@ const Clients = (props) => {
             </Button>
           </ButtonGroup>
           <br />
-          {`${selected.length} clients selected`}
+          <Typography>
+            {selected.length > 0 ? (
+              `${selected.length} ${
+                selected.length === 1 ? "client" : "clients"
+              } selected`
+            ) : (
+              <br />
+            )}
+          </Typography>
         </>
       ) : (
         ""
