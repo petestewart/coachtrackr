@@ -8,9 +8,12 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
 import PersonIcon from "@material-ui/icons/Person";
-import PhoneIcon from "@material-ui/icons/Phone";
-import EmailIcon from "@material-ui/icons/Email";
+import EventIcon from "@material-ui/icons/Event";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import HourglassFullIcon from "@material-ui/icons/HourglassFull";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import NotesIcon from "@material-ui/icons/Notes";
+import NotificationsIcon from "@material-ui/icons/Notifications";
 
 import {
   Grid,
@@ -26,35 +29,35 @@ import {
   Radio,
 } from "@material-ui/core";
 
-
-const CreateClient = ({ clientId, ...props }) => {
-  const [client, setClient] = useState({
-    first_name: "",
-    last_name: "",
-    phone: "",
-    email: "",
-    isCurrent: true,
-    isGroup: false
+const CreateSession = ({ sessionId, ...props }) => {
+  const [session, setSession] = useState({
+    clientId: 0,
+    date: "",
+    startTime: "",
+    endTime: "",
+    isProBono: false,
+    notes: "",
+    notifications: [],
   });
 
   const handleChange = (e) => {
-    setClient({
-      ...client,
+    setSession({
+      ...session,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleChecked = (e) => {
-    setClient({
-      ...client,
+    setSession({
+      ...session,
       [e.target.name]: e.target.checked,
     });
   };
 
   const handleRadio = (e) => {
-    console.log(e.target.value)
-    setClient({
-      ...client,
+    console.log(e.target.value);
+    setSession({
+      ...session,
       [e.target.name]: e.target.value === "true",
     });
   };
@@ -67,10 +70,10 @@ const CreateClient = ({ clientId, ...props }) => {
         <Card>
           <CardHeader
             avatar={
-              client.first_name && client.last_name ? (
+              session.first_name && session.last_name ? (
                 <Avatar>
-                  {client.first_name && client.first_name.charAt(0)}
-                  {client.last_name && client.last_name.charAt(0)}
+                  {session.first_name && session.first_name.charAt(0)}
+                  {session.last_name && session.last_name.charAt(0)}
                 </Avatar>
               ) : (
                 ""
@@ -81,101 +84,85 @@ const CreateClient = ({ clientId, ...props }) => {
                 <CloseIcon />
               </IconButton>
             }
-            // title={`${client.first_name} ${client.last_name}`}
-            title={"Add New Client"}
+            // title={`${session.first_name} ${session.last_name}`}
+            title={"Add New Session"}
             style={{ textAlign: "center" }}
             titleTypographyProps={{ variant: "h4" }}
           />
 
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Grid container justify="center" spacing={3}>
-                  <RadioGroup
-                    row
-                    aria-label="isGroup1"
-                    name="isGroup"
-                    onChange={handleRadio}
-                    value={client.isGroup}
-                  >
-                    <FormControlLabel
-                      value={false}
-                      control={<Radio color="primary" />}
-                      label="Individual"
-                    />
-                    <FormControlLabel
-                      value={true}
-                      control={<Radio color="primary" />}
-                      label="Group"
-                    />
-                  </RadioGroup>
-                </Grid>
-              </Grid>
-
               <Grid item xs={1}></Grid>
               <Grid item xs={1}>
                 <PersonIcon />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={10}>
                 <TextField
                   fullWidth
-                  name="first_name"
+                  name="clientId"
                   onChange={handleChange}
-                  value={client.first_name}
-                  label={"First name"}
-                  required
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  name="last_name"
-                  onChange={handleChange}
-                  value={client.last_name}
-                  label={"Last name"}
+                  value={session.clientId}
+                  label={"Client"}
                   required
                 />
               </Grid>
 
               <Grid item xs={1}></Grid>
               <Grid item xs={1}>
-                <PhoneIcon />
+                <EventIcon />
               </Grid>
               <Grid item xs={10}>
                 <TextField
                   fullWidth
-                  name="phone"
+                  name="date"
                   onChange={handleChange}
-                  value={client.phone}
-                  label={"Phone number"}
+                  value={session.date}
+                  label={"Date"}
                 />
               </Grid>
 
               <Grid item xs={1}></Grid>
               <Grid item xs={1}>
-                <EmailIcon />
+                <AccessTimeIcon />
               </Grid>
               <Grid item xs={10}>
                 <TextField
                   fullWidth
-                  name="email"
+                  name="startTime"
                   onChange={handleChange}
-                  value={client.email}
-                  label={"Email address"}
+                  value={session.startTime}
+                  label={"Start Time"}
                 />
               </Grid>
 
-              <Grid item xs={2}></Grid>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={1}>
+                <HourglassFullIcon />
+              </Grid>
+              <Grid item xs={10}>
+                <TextField
+                  fullWidth
+                  name="endTime"
+                  onChange={handleChange}
+                  value={session.endTime}
+                  label={"Duration"}
+                />
+              </Grid>
+
+              <Grid item xs={1}></Grid>
+              <Grid item xs={1}>
+                <AttachMoneyIcon />
+              </Grid>
               <Grid item xs={10}>
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={client.isCurrent}
+                      checked={session.isProBono}
                       onChange={handleChecked}
-                      name="isCurrent"
+                      name="isProBono"
                     />
                   }
-                  label="Current client"
+                  label="Pro bono"
                 />
               </Grid>
 
@@ -188,8 +175,22 @@ const CreateClient = ({ clientId, ...props }) => {
                   fullWidth
                   name="notes"
                   onChange={handleChange}
-                  value={client.notes}
+                  value={session.notes}
                   label={"Notes"}
+                />
+              </Grid>
+
+              <Grid item xs={1}></Grid>
+              <Grid item xs={1}>
+                <NotificationsIcon />
+              </Grid>
+              <Grid item xs={10}>
+                <TextField
+                  fullWidth
+                  name="notifications"
+                  onChange={handleChange}
+                  value={session.notifications}
+                  label={"Add Notification"}
                 />
               </Grid>
             </Grid>
@@ -202,7 +203,7 @@ const CreateClient = ({ clientId, ...props }) => {
                 <Button
                   color="secondary"
                   variant="contained"
-                  onClick={props.cancel}
+                  onClick={props.handleClose}
                 >
                   Cancel
                 </Button>
@@ -215,4 +216,4 @@ const CreateClient = ({ clientId, ...props }) => {
   );
 };
 
-export default CreateClient;
+export default CreateSession;

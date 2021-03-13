@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
 
 // import Box from "@material-ui/core/Box";
-import Avatar from "@material-ui/core/Avatar";
 
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-
 import PersonIcon from "@material-ui/icons/Person";
 import PhoneIcon from "@material-ui/icons/Phone";
 import EmailIcon from "@material-ui/icons/Email";
@@ -27,62 +25,45 @@ import {
 } from "@material-ui/core";
 
 
-const CreateClient = ({ clientId, ...props }) => {
-  const [client, setClient] = useState({
-    first_name: "",
-    last_name: "",
-    phone: "",
-    email: "",
-    isCurrent: true,
-    isGroup: false
-  });
+const ImportSessions = ({ sessionId, ...props }) => {
+  const [params, setParams] = useState({})
 
   const handleChange = (e) => {
-    setClient({
-      ...client,
+    setParams({
+      ...params,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleChecked = (e) => {
-    setClient({
-      ...client,
+    setParams({
+      ...params,
       [e.target.name]: e.target.checked,
     });
   };
 
   const handleRadio = (e) => {
     console.log(e.target.value)
-    setClient({
-      ...client,
+    setParams({
+      ...params,
       [e.target.name]: e.target.value === "true",
     });
   };
-
-  // const classes = useStyles();
 
   return (
     <div style={props.style} className={props.classes}>
       <form>
         <Card>
           <CardHeader
-            avatar={
-              client.first_name && client.last_name ? (
-                <Avatar>
-                  {client.first_name && client.first_name.charAt(0)}
-                  {client.last_name && client.last_name.charAt(0)}
-                </Avatar>
-              ) : (
-                ""
-              )
-            }
+            
             action={
               <IconButton aria-label="cancel" onClick={props.handleClose}>
                 <CloseIcon />
               </IconButton>
             }
-            // title={`${client.first_name} ${client.last_name}`}
-            title={"Add New Client"}
+            // title={`${params.first_name} ${params.last_name}`}
+            title={"Import Sessions"}
+            subheader={"Where would you like to import sessions from?"}
             style={{ textAlign: "center" }}
             titleTypographyProps={{ variant: "h4" }}
           />
@@ -93,26 +74,26 @@ const CreateClient = ({ clientId, ...props }) => {
                 <Grid container justify="center" spacing={3}>
                   <RadioGroup
                     row
-                    aria-label="isGroup1"
-                    name="isGroup"
+                    aria-label="isLocal1"
+                    name="isLocal"
                     onChange={handleRadio}
-                    value={client.isGroup}
+                    value={params.isLocal}
                   >
                     <FormControlLabel
                       value={false}
                       control={<Radio color="primary" />}
-                      label="Individual"
+                      label="Cloud"
                     />
                     <FormControlLabel
                       value={true}
                       control={<Radio color="primary" />}
-                      label="Group"
+                      label="Local File"
                     />
                   </RadioGroup>
                 </Grid>
               </Grid>
 
-              <Grid item xs={1}></Grid>
+              {/* <Grid item xs={1}></Grid>
               <Grid item xs={1}>
                 <PersonIcon />
               </Grid>
@@ -121,7 +102,7 @@ const CreateClient = ({ clientId, ...props }) => {
                   fullWidth
                   name="first_name"
                   onChange={handleChange}
-                  value={client.first_name}
+                  value={params.first_name}
                   label={"First name"}
                   required
                 />
@@ -131,7 +112,7 @@ const CreateClient = ({ clientId, ...props }) => {
                   fullWidth
                   name="last_name"
                   onChange={handleChange}
-                  value={client.last_name}
+                  value={params.last_name}
                   label={"Last name"}
                   required
                 />
@@ -146,7 +127,7 @@ const CreateClient = ({ clientId, ...props }) => {
                   fullWidth
                   name="phone"
                   onChange={handleChange}
-                  value={client.phone}
+                  value={params.phone}
                   label={"Phone number"}
                 />
               </Grid>
@@ -160,7 +141,7 @@ const CreateClient = ({ clientId, ...props }) => {
                   fullWidth
                   name="email"
                   onChange={handleChange}
-                  value={client.email}
+                  value={params.email}
                   label={"Email address"}
                 />
               </Grid>
@@ -170,12 +151,12 @@ const CreateClient = ({ clientId, ...props }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={client.isCurrent}
+                      checked={params.isCurrent}
                       onChange={handleChecked}
                       name="isCurrent"
                     />
                   }
-                  label="Current client"
+                  label="Current session"
                 />
               </Grid>
 
@@ -188,16 +169,17 @@ const CreateClient = ({ clientId, ...props }) => {
                   fullWidth
                   name="notes"
                   onChange={handleChange}
-                  value={client.notes}
+                  value={params.notes}
                   label={"Notes"}
                 />
-              </Grid>
+              </Grid> */}
+              
             </Grid>
 
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
               <>
                 <Button color="primary" variant="contained">
-                  Save
+                  Import
                 </Button>
                 <Button
                   color="secondary"
@@ -215,4 +197,4 @@ const CreateClient = ({ clientId, ...props }) => {
   );
 };
 
-export default CreateClient;
+export default ImportSessions;

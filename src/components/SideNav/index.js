@@ -15,8 +15,6 @@ import SettingsIcon from "@material-ui/icons/Settings";
 
 import Sidebar from "../UI/Sidebar";
 
-import CreateClient from "../Clients/CreateClient";
-
 // const onClick = (e, item) => {
 //   window.alert(JSON.stringify(item, null, 2));
 // };
