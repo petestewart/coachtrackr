@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
+import dayjs from "dayjs";
 
 import { SessionsContext } from "./SessionsProvider";
 
@@ -30,6 +31,9 @@ import {
   Button,
   ButtonGroup,
 } from "@material-ui/core";
+
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -154,7 +158,7 @@ const SessionDetail = ({ sessionId, ...props }) => {
                     value={session.date}
                   />
                 ) : (
-                  session.date
+                  dayjs(session.date).format('dddd, MMMM D YYYY')
                 )}
               </Grid>
               <Grid item xs={1}></Grid>
@@ -179,7 +183,7 @@ const SessionDetail = ({ sessionId, ...props }) => {
                     />
                   </>
                 ) : (
-                  `${session.startTime} - ${session.endTime}`
+                  `${dayjs(session.startTime, 'H:mm').format('h:mma')} - ${dayjs(session.endTime, 'H:mm').format('h:mma')}`
                 )}
               </Grid>
               <Grid item xs={1}></Grid>

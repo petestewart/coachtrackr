@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
-
 import { makeStyles } from "@material-ui/core/styles";
+import dayjs from "dayjs";
+
+
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -168,7 +170,7 @@ const Sessions = (props) => {
 
       <SessionModal />
 
-      {sessions.map((session, index) => (
+      {sessions.sort((a,b) => dayjs(a.date).valueOf()-dayjs(b.date).valueOf()).map((session, index, array) => (
         <SessionCard
           key={index}
           onClick={() => {
@@ -180,6 +182,7 @@ const Sessions = (props) => {
             }
           }}
           date={session.date}
+          displayDate={index === 0 || session.date !== array[index-1].date}
           startTime={session.startTime}
           endTime={session.endTime}
           clientName={session.clientName}
@@ -188,7 +191,6 @@ const Sessions = (props) => {
         />
       ))}
 
-      <SessionCard />
     </div>
   );
 };

@@ -186,7 +186,6 @@ const Clients = (props) => {
         />
       ))}
 
-      <ClientCard />
     </div>
   );
 };
