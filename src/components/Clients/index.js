@@ -4,6 +4,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import SortRoundedIcon from "@material-ui/icons/Sort";
+import FilterListRoundedIcon from "@material-ui/icons/FilterList";
+
+import SearchIcon from "@material-ui/icons/Search";
+
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+
+import InputBase from "@material-ui/core/InputBase";
 
 import ClientCard from "./ClientCard";
 import ClientDetail from "./ClientDetail";
@@ -13,6 +22,7 @@ import ImportClients from "./ImportClients";
 import { ClientsContext } from "./ClientsProvider";
 
 const Clients = (props) => {
+  const [searchValue, setSearchValue] = useState("");
   const [activeModal, setActiveModal] = useState("");
   const [modalClient, setModalClient] = useState({});
   const [manageMode, setManageMode] = useState(false);
@@ -48,6 +58,10 @@ const Clients = (props) => {
     } else {
       setSelected([...currentSelected, clientId]);
     }
+  };
+
+  const handleSearch = (e) => {
+    setSearchValue((prevState) => e.target.value);
   };
 
   const modalStyle = {
@@ -128,6 +142,38 @@ const Clients = (props) => {
   return (
     <div className="Clients">
       <h1>Clients</h1>
+      <div className="info-bar">
+        <Grid container alignItems="center">
+          <Grid item xs={5} alignItems="center">
+            <Typography>{clients.length} clients</Typography>
+          </Grid>
+          <Grid item xs={4} alignItems="center">
+            <Typography>
+              <SortRoundedIcon />
+              Sort A to Z
+            </Typography>
+          </Grid>
+          <Grid item xs={3} justifyContent="center">
+            <Typography alignItems="center">
+              <FilterListRoundedIcon />
+              Filter
+            </Typography>
+          </Grid>
+        </Grid>
+      </div>
+      <div className="search-bar">
+        <SearchIcon />
+        <InputBase
+          placeholder="Search…"
+          // classes={{
+          //   root: classes.inputRoot,
+          //   input: classes.inputInput,
+          // }}
+          inputProps={{ "aria-label": "search" }}
+          value={searchValue}
+          onChange={handleSearch}
+        />
+      </div>
       {manageMode ? (
         <>
           <ButtonGroup
@@ -164,28 +210,34 @@ const Clients = (props) => {
         ""
       )}
       <ClientModal firstName={"Pete"} />
-      {clients.map((client, index) => (
-        <ClientCard
-          key={index}
-          onClick={() => {
-            if (manageMode) {
-              handleSelect(client.id);
-            } else {
-              setModalClient(client);
-              setActiveModal("clientDetail");
+      {clients.map((client, index) =>
+        searchValue &&
+        !`${client.first_name} ${client.last_name}`
+          .toLowerCase()
+          .includes(searchValue.toLowerCase()) ? (
+          ""
+        ) : (
+          <ClientCard
+            key={index}
+            onClick={() => {
+              if (manageMode) {
+                handleSelect(client.id);
+              } else {
+                setModalClient(client);
+                setActiveModal("clientDetail");
+              }
+            }}
+            firstName={client.first_name}
+            lastName={client.last_name}
+            futureSessions={
+              client.upcomingSessions && client.upcomingSessions.length
             }
-          }}
-          firstName={client.first_name}
-          lastName={client.last_name}
-          futureSessions={
-            client.upcomingSessions && client.upcomingSessions.length
-          }
-          pastSessions={client.pastSessions}
-          manageMode={manageMode}
-          selected={selected.includes(client.id)}
-        />
-      ))}
-
+            pastSessions={client.pastSessions}
+            manageMode={manageMode}
+            selected={selected.includes(client.id)}
+          />
+        )
+      )}
     </div>
   );
 };
