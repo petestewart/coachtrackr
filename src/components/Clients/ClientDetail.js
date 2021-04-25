@@ -4,6 +4,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { ClientsContext } from "./ClientsProvider";
 
 // import Box from "@material-ui/core/Box";
+
+import Alert from "@material-ui/lab/Alert";
 import Avatar from "@material-ui/core/Avatar";
 
 import IconButton from "@material-ui/core/IconButton";
@@ -59,9 +61,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ClientDetail = ({ clientId, ...props }) => {
-  const { getClientById, updateClient } = useContext(ClientsContext);
+  const { getClientById, updateClient, removeClient } = useContext(
+    ClientsContext
+  );
 
   const [editMode, setEditMode] = useState(false);
+  const [deleteWarning, setDeleteWarning] = useState(false);
   const [client, setClient] = useState({});
 
   const handleChange = (e) => {
@@ -73,7 +78,7 @@ const ClientDetail = ({ clientId, ...props }) => {
 
   const handleUpdate = () => {
     updateClient(client);
-    setClient({})
+    setClient({});
   };
 
   useEffect(() => {
@@ -211,9 +216,17 @@ const ClientDetail = ({ clientId, ...props }) => {
                     upcoming sessions
                     {client.upcomingSessions ? (
                       <Typography variant={"subtitle2"}>
-                        {client.upcomingSessions.map((session) => {
-                          return `${session.date}, `;
-                        })}
+                        {client.upcomingSessions
+                          .slice(0, 3)
+                          .map((session, index, array) => {
+                            return `${session.date}${
+                              index === array.length - 1
+                                ? client.upcomingSessions.length > 3
+                                  ? "..."
+                                  : ""
+                                : ", "
+                            } `;
+                          })}
                       </Typography>
                     ) : (
                       "No"
@@ -242,24 +255,64 @@ const ClientDetail = ({ clientId, ...props }) => {
 
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
               {editMode ? (
-                <>
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={handleUpdate}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    onClick={() => {
-                      setEditMode(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </>
+                deleteWarning ? (
+                  <>
+                    <Alert severity="error">
+                      <strong>
+                        Are you sure you want to delete {client.first_name}{" "}
+                        {client.last_name} as a client?
+                      </strong>
+                    </Alert>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={() => {
+                        removeClient(clientId);
+                        setDeleteWarning(false);
+                        props.handleClose();
+                      }}
+                    >
+                      Yes, delete {client.first_name}
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="outlined"
+                      onClick={() => {
+                        setDeleteWarning(false);
+                      }}
+                    >
+                      No, Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={handleUpdate}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={() => {
+                        setEditMode(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="outlined"
+                      onClick={() => {
+                        setDeleteWarning(true);
+                      }}
+                    >
+                      Delete Client
+                    </Button>
+                  </>
+                )
               ) : (
                 ""
               )}

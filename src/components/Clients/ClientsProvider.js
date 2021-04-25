@@ -21,20 +21,40 @@ export const ClientsProvider = (props) => {
 
   const createClient = (newClient) =>
     new Promise((resolve) => {
-      const client = {...newClient, id: (allClients.length)}
-      const newClientList = [...allClients, client]
+      const client = { ...newClient, id: allClients.length };
+      const newClientList = [...allClients, client];
       setAllClients((prevState) => [...prevState, client]);
       resolve(newClientList);
     });
 
   const updateClient = (updatedClient) =>
     new Promise((resolve) => {
-      const newClientList = [...allClients].filter((client) => client.id !== updatedClient.id);
-      newClientList.push(updatedClient)
+      const newClientList = [...allClients].filter(
+        (client) => client.id !== updatedClient.id
+      );
+      newClientList.push(updatedClient);
 
       setAllClients(newClientList);
       resolve(newClientList);
     });
+
+  const removeClient = (clientId) => {
+    new Promise((resolve) => {
+      console.log('about to remove client #', clientId)
+      const updatedClients = [...allClients].map((client) =>
+        client.id === clientId ? { ...client, isActive: false } : client
+      );
+      setAllClients(updatedClients);
+      resolve("");
+    });
+  };
+
+  const removeClients = (clients) => {
+    const promises = clients.map((clientId) => removeClient(clientId));
+    Promise.all(promises).then(() => {
+      return allClients;
+    });
+  };
 
   // const createClient = (client) => {
   //   setAllClients((prevState) => [...prevState, client]);
@@ -43,9 +63,11 @@ export const ClientsProvider = (props) => {
   return (
     <ClientsContext.Provider
       value={{
+        createClient,
         getClients,
         getClientById,
-        createClient,
+        removeClient,
+        removeClients,
         updateClient,
         allClients,
       }}

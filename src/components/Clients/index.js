@@ -30,7 +30,9 @@ const Clients = (props) => {
   const [selected, setSelected] = useState([]);
   const [clients, setClients] = useState([]);
 
-  const { getClients, createClient, allClients } = useContext(ClientsContext);
+  const { removeClients, createClient, allClients } = useContext(
+    ClientsContext
+  );
 
   useEffect(() => {
     if (allClients) {
@@ -222,6 +224,21 @@ const Clients = (props) => {
               Cancel
             </Button>
           </ButtonGroup>
+          {selected.length > 0 ? (
+            <ButtonGroup color="" aria-label="outlined primary button group">
+              <Button
+                onClick={() => {
+                  removeClients(selected);
+                  handleClose();
+                  setSelected([]);
+                }}
+              >
+                Delete {selected.length === 1 ? "client" : "clients"}
+              </Button>
+            </ButtonGroup>
+          ) : (
+            ""
+          )}
           <br />
           <Typography>
             {selected.length > 0 ? (
@@ -238,6 +255,7 @@ const Clients = (props) => {
       )}
       <ClientModal />
       {clients
+        .filter((client) => client.isActive)
         .sort((a, b) => (a.first_name > b.first_name ? 1 : -1))
         .map((client, index) =>
           searchValue &&
