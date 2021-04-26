@@ -83,7 +83,6 @@ const Sessions = (props) => {
         <CreateSession
           style={modalStyle}
           classes={classes.paper}
-          sessionId={modalSession.id}
           handleClose={handleClose}
         />
       ),

@@ -2,21 +2,46 @@ import React, { useContext, useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
+import Alert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import SortRoundedIcon from "@material-ui/icons/Sort";
+import FilterListRoundedIcon from "@material-ui/icons/FilterList";
+
+import SearchIcon from "@material-ui/icons/Search";
+
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+
+import InputBase from "@material-ui/core/InputBase";
 
 import ClientCard from "./ClientCard";
 import ClientDetail from "./ClientDetail";
 import CreateClient from "./CreateClient";
 import ImportClients from "./ImportClients";
+import CreateSession from "../Sessions/CreateSession";
 
 import { ClientsContext } from "./ClientsProvider";
 
 const Clients = (props) => {
+  const [searchValue, setSearchValue] = useState("");
+  const [sortBy, setSortBy] = useState("AtoZ");
   const [activeModal, setActiveModal] = useState("");
   const [modalClient, setModalClient] = useState({});
   const [manageMode, setManageMode] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [deleteWarning, setDeleteWarning] = useState(false);
+
+  const { removeClients, createClient, allClients } = useContext(
+    ClientsContext
+  );
+
+  useEffect(() => {
+    if (allClients) {
+      setClients(allClients);
+    }
+  }, [allClients]);
 
   useEffect(() => {
     if (props.openModal) {
@@ -32,10 +57,6 @@ const Clients = (props) => {
     }
   }, [props.openModal]);
 
-  // const handleOpen = () => {
-  //   setOpenModal(true);
-  // };
-
   const handleClose = () => {
     setActiveModal("");
     props.handleCloseModal();
@@ -48,6 +69,15 @@ const Clients = (props) => {
     } else {
       setSelected([...currentSelected, clientId]);
     }
+  };
+
+  const handleSearch = (e) => {
+    setSearchValue((prevState) => e.target.value);
+  };
+
+  const createNewClient = (newClient) => {
+    createClient(newClient);
+    setActiveModal("");
   };
 
   const modalStyle = {
@@ -79,6 +109,7 @@ const Clients = (props) => {
           classes={classes.paper}
           clientId={modalClient.id}
           handleClose={handleClose}
+          openAddSessionWindow={() => setActiveModal("addSession")}
         />
       ),
       addClient: (
@@ -87,6 +118,7 @@ const Clients = (props) => {
           classes={classes.paper}
           clientId={modalClient.id}
           handleClose={handleClose}
+          handleCreateClient={createNewClient}
         />
       ),
       importClients: (
@@ -95,6 +127,14 @@ const Clients = (props) => {
           classes={classes.paper}
           clientId={modalClient.id}
           handleClose={handleClose}
+        />
+      ),
+      addSession: (
+        <CreateSession
+          style={modalStyle}
+          classes={classes.paper}
+          handleClose={handleClose}
+          clientId={modalClient.id}
         />
       ),
     };
@@ -115,77 +155,177 @@ const Clients = (props) => {
     );
   };
 
-  const [clients, setClients] = useState([]);
-
-  const { getClients } = useContext(ClientsContext);
-
-  useEffect(() => {
-    getClients().then((res) => {
-      setClients(res);
-    });
-  }, []);
-
   return (
     <div className="Clients">
       <h1>Clients</h1>
+      <div className="info-bar">
+        <Grid container alignItems="center">
+          <Grid item xs={5} alignItems="center">
+            <Typography>
+              {searchValue
+                ? `showing ${
+                    clients.filter((client) => {
+                      if (
+                        `${client.first_name} ${client.last_name}`
+                          .toLowerCase()
+                          .includes(searchValue.toLowerCase())
+                      )
+                        return true;
+                      else {
+                        return false;
+                      }
+                    }).length
+                  }
+                  of ${clients.length} clients`
+                : `${clients.length} clients`}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} alignItems="center">
+            <Typography>
+              <SortRoundedIcon />
+              Sort A to Z
+            </Typography>
+          </Grid>
+          <Grid item xs={3} justifyContent="center">
+            <Typography alignItems="center">
+              <FilterListRoundedIcon />
+              Filter
+            </Typography>
+          </Grid>
+        </Grid>
+      </div>
+      <div className="search-bar">
+        <SearchIcon />
+        <InputBase
+          placeholder="Search…"
+          inputProps={{ "aria-label": "search" }}
+          value={searchValue}
+          onChange={handleSearch}
+        />
+      </div>
       {manageMode ? (
-        <>
-          <ButtonGroup
-            color="primary"
-            aria-label="outlined primary button group"
-          >
-            <Button
-              onClick={() => {
-                setSelected(clients.map((client) => client.id));
-              }}
+        deleteWarning ? (
+          <>
+            <Alert severity="error">
+              <strong>
+                Are you sure you want to delete{" "}
+                {selected.length === 1
+                  ? "this client"
+                  : `these ${selected.length} clients`}
+                ?
+              </strong>{" "}
+              <br />
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={() => {
+                  removeClients(selected);
+                  handleClose();
+                  setSelected([]);
+                }}
+              >
+                Yes, Delete {selected.length === 1 ? "client" : "clients"}
+              </Button>
+              <Button
+                color="secondary"
+                variant="outlined"
+                onClick={() => {
+                  setDeleteWarning(false);
+                }}
+              >
+                No, Cancel
+              </Button>
+            </Alert>
+          </>
+        ) : (
+          <>
+            <ButtonGroup
+              color="primary"
+              aria-label="outlined primary button group"
             >
-              Select All
-            </Button>
-            <Button
-              onClick={() => {
-                setSelected([]);
-              }}
-            >
-              Select None
-            </Button>
-            <Button
-              onClick={() => {
-                setSelected([]);
-                handleClose();
-              }}
-            >
-              Cancel
-            </Button>
-          </ButtonGroup>
-          <br />
-          {`${selected.length} clients selected`}
-        </>
+              <Button
+                onClick={() => {
+                  setSelected(clients.map((client) => client.id));
+                }}
+              >
+                Select All
+              </Button>
+              <Button
+                onClick={() => {
+                  setSelected([]);
+                }}
+              >
+                Select None
+              </Button>
+              <Button
+                onClick={() => {
+                  setSelected([]);
+                  handleClose();
+                }}
+              >
+                Cancel
+              </Button>
+            </ButtonGroup>
+            {selected.length > 0 ? (
+              <ButtonGroup color="" aria-label="outlined primary button group">
+                <Button
+                  onClick={() => {
+                    setDeleteWarning(true);
+                  }}
+                >
+                  Delete {selected.length === 1 ? "client" : "clients"}
+                </Button>
+              </ButtonGroup>
+            ) : (
+              ""
+            )}
+            <br />
+            <Typography>
+              {selected.length > 0 ? (
+                `${selected.length} ${
+                  selected.length === 1 ? "client" : "clients"
+                } selected`
+              ) : (
+                <br />
+              )}
+            </Typography>
+          </>
+        )
       ) : (
         ""
       )}
-      <ClientModal firstName={"Pete"} />
-      {clients.map((client, index) => (
-        <ClientCard
-          key={index}
-          onClick={() => {
-            if (manageMode) {
-              handleSelect(client.id);
-            } else {
-              setModalClient(client);
-              setActiveModal("clientDetail");
-            }
-          }}
-          firstName={client.first_name}
-          lastName={client.last_name}
-          futureSessions={
-            client.upcomingSessions && client.upcomingSessions.length
-          }
-          pastSessions={client.pastSessions}
-          manageMode={manageMode}
-          selected={selected.includes(client.id)}
-        />
-      ))}
-
+      <ClientModal />
+      {clients
+        .filter((client) => client.isActive)
+        .sort((a, b) => (a.first_name > b.first_name ? 1 : -1))
+        .map((client, index) =>
+          searchValue &&
+          !`${client.first_name} ${client.last_name}`
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()) ? (
+            ""
+          ) : (
+            <ClientCard
+              key={index}
+              onClick={() => {
+                if (manageMode) {
+                  handleSelect(client.id);
+                } else {
+                  setModalClient(client);
+                  setActiveModal("clientDetail");
+                }
+              }}
+              firstName={client.first_name}
+              lastName={client.last_name}
+              futureSessions={
+                client.upcomingSessions && client.upcomingSessions.length
+              }
+              pastSessions={client.pastSessions}
+              manageMode={manageMode}
+              selected={selected.includes(client.id)}
+            />
+          )
+        )}
     </div>
   );
 };

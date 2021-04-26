@@ -39,7 +39,13 @@ const ClientCard = (props) => {
                 {`${props.firstName} ${props.lastName}`}
               </Typography>
               <Typography className={classes.subtitle} color="textSecondary">
-                {`${props.futureSessions} upcoming sessions, ${props.pastSessions} past sessions`}
+                {`${
+                  props.futureSessions ? props.futureSessions : "No"
+                } upcoming ${
+                  props.futureSessions === 1 ? "session" : "sessions"
+                }, ${props.pastSessions ? props.pastSessions : "No"} past ${
+                  props.futureSessions === 1 ? "session" : "sessions"
+                }`}
               </Typography>
             </Grid>
           </Grid>

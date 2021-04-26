@@ -26,7 +26,6 @@ import {
   Radio,
 } from "@material-ui/core";
 
-
 const CreateClient = ({ clientId, ...props }) => {
   const [client, setClient] = useState({
     first_name: "",
@@ -34,7 +33,7 @@ const CreateClient = ({ clientId, ...props }) => {
     phone: "",
     email: "",
     isCurrent: true,
-    isGroup: false
+    isGroup: false,
   });
 
   const handleChange = (e) => {
@@ -52,12 +51,16 @@ const CreateClient = ({ clientId, ...props }) => {
   };
 
   const handleRadio = (e) => {
-    console.log(e.target.value)
+    console.log(e.target.value);
     setClient({
       ...client,
       [e.target.name]: e.target.value === "true",
     });
   };
+
+  // const handleCreateClient = () => {
+  //   props.handleCreateClient(client)
+  // }
 
   // const classes = useStyles();
 
@@ -196,7 +199,13 @@ const CreateClient = ({ clientId, ...props }) => {
 
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
               <>
-                <Button color="primary" variant="contained">
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={() => {
+                    props.handleCreateClient(client);
+                  }}
+                >
                   Save
                 </Button>
                 <Button

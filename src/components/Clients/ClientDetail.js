@@ -4,7 +4,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { ClientsContext } from "./ClientsProvider";
 
 // import Box from "@material-ui/core/Box";
+
+import Alert from "@material-ui/lab/Alert";
 import Avatar from "@material-ui/core/Avatar";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Fade from '@material-ui/core/Fade';
 
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
@@ -59,22 +64,40 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ClientDetail = ({ clientId, ...props }) => {
-  const { getClientById } = useContext(ClientsContext);
+  const { getClientById, updateClient, removeClient } = useContext(
+    ClientsContext
+  );
 
   const [editMode, setEditMode] = useState(false);
-  const [client, setClient] = useState({})
+  const [deleteWarning, setDeleteWarning] = useState(false);
+  const [client, setClient] = useState({});
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleChange = (e) => {
     setClient({
       ...client,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleUpdate = () => {
+    updateClient(client);
+    setClient({});
+  };
 
   useEffect(() => {
-    getClientById(clientId)
-      .then((res) => {setClient(res)})
-  }, [])
+    getClientById(clientId).then((res) => {
+      setClient(res);
+    });
+  }, []);
 
   const toggleEditMode = () => {
     setEditMode((prevState) => !prevState);
@@ -106,10 +129,24 @@ const ClientDetail = ({ clientId, ...props }) => {
                 </IconButton>
                 <IconButton
                   aria-label="menu"
+                  aria-controls="simple-menu"
+                  aria-haspopup="true"
+                  onClick={handleMenuOpen}
                   disabled={editMode ? true : false}
                 >
                   <MoreVertIcon />
                 </IconButton>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                  TransitionComponent={Fade}
+                >
+                  <MenuItem onClick={props.openAddSessionWindow}>Book session</MenuItem>
+                  <MenuItem onClick={handleMenuClose}>View client history</MenuItem>
+                </Menu>
                 <IconButton aria-label="cancel" onClick={props.handleClose}>
                   <CloseIcon />
                 </IconButton>
@@ -205,9 +242,17 @@ const ClientDetail = ({ clientId, ...props }) => {
                     upcoming sessions
                     {client.upcomingSessions ? (
                       <Typography variant={"subtitle2"}>
-                        {client.upcomingSessions.map((session) => {
-                          return `${session.date}, `;
-                        })}
+                        {client.upcomingSessions
+                          .slice(0, 3)
+                          .map((session, index, array) => {
+                            return `${session.date}${
+                              index === array.length - 1
+                                ? client.upcomingSessions.length > 3
+                                  ? "..."
+                                  : ""
+                                : ", "
+                            } `;
+                          })}
                       </Typography>
                     ) : (
                       "No"
@@ -236,20 +281,64 @@ const ClientDetail = ({ clientId, ...props }) => {
 
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
               {editMode ? (
-                <>
-                  <Button color="primary" variant="contained">
-                    Save
-                  </Button>
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    onClick={() => {
-                      setEditMode(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </>
+                deleteWarning ? (
+                  <>
+                    <Alert severity="error">
+                      <strong>
+                        Are you sure you want to delete {client.first_name}{" "}
+                        {client.last_name} as a client?
+                      </strong>
+                    </Alert>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={() => {
+                        removeClient(clientId);
+                        setDeleteWarning(false);
+                        props.handleClose();
+                      }}
+                    >
+                      Yes, delete {client.first_name}
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="outlined"
+                      onClick={() => {
+                        setDeleteWarning(false);
+                      }}
+                    >
+                      No, Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={handleUpdate}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={() => {
+                        setEditMode(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="outlined"
+                      onClick={() => {
+                        setDeleteWarning(true);
+                      }}
+                    >
+                      Delete Client
+                    </Button>
+                  </>
+                )
               ) : (
                 ""
               )}
