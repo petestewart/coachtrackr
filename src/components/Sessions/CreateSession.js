@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
 
 // import Box from "@material-ui/core/Box";
@@ -31,7 +31,7 @@ import {
 
 const CreateSession = ({ sessionId, ...props }) => {
   const [session, setSession] = useState({
-    clientId: 0,
+    clientId: props.clientId || 0,
     date: "",
     startTime: "",
     endTime: "",

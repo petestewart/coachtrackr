@@ -184,7 +184,7 @@ const ImportClients = ({ clientId, ...props }) => {
                 <Button
                   color="secondary"
                   variant="contained"
-                  onClick={props.cancel}
+                  onClick={props.handleClose}
                 >
                   Cancel
                 </Button>
