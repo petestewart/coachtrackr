@@ -4,8 +4,8 @@ import { Paper } from "@material-ui/core";
 const Home = (props) => {
   return (
     <div className="Home">
-      <h1>Home</h1>
-      <Paper>Paper hello hi there</Paper>
+      <h1>CoachTrackr</h1>
+      <Paper>Welcome to the homepage</Paper>
     </div>
   );
 };

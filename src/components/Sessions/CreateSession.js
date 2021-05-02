@@ -32,12 +32,12 @@ import {
 const CreateSession = ({ sessionId, ...props }) => {
   const [session, setSession] = useState({
     clientId: props.clientId || 0,
-    date: "",
-    startTime: "",
-    endTime: "",
-    isProBono: false,
-    notes: "",
-    notifications: [],
+    date: props.date || "",
+    startTime: props.startTime || "",
+    endTime: props.endTime || "",
+    isProBono: props.isProBono || false,
+    notes: props.notes || "",
+    notifications: props.notifications || [],
   });
 
   const handleChange = (e) => {

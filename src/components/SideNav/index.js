@@ -31,7 +31,7 @@ const SideNav = (props) => {
       name: "home",
       label: "Home",
       Icon: HomeIcon,
-      route: "/home",
+      route: "/",
       onClick: resetModal,
     },
     {

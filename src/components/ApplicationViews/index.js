@@ -56,7 +56,7 @@ const ApplicationViews = (props) => {
       <ScrollToTop />
       <Route
         exact
-        path="/home"
+        path="/"
         render={(props) => <div className="main-content"><Home history={props.history} {...props} /></div>}
       />
 
