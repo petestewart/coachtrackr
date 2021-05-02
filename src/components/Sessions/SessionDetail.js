@@ -165,10 +165,17 @@ const SessionDetail = ({ sessionId, ...props }) => {
                 {editMode ? (
                   <TextField
                     fullWidth
-                    name="clientName"
+                    name="clientId"
+                    select
                     onChange={handleChange}
-                    value={session.clientName}
-                  />
+                    value={session.clientId}
+                  >
+                    {props.clientList.map((client) => (
+                    <MenuItem key={client.id} value={client.id}>
+                      {client.name}
+                    </MenuItem>
+                  ))}
+                    </TextField>
                 ) : (
                   session.clientName
                 )}

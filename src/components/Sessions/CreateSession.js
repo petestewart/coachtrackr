@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
 
 // import Box from "@material-ui/core/Box";
@@ -15,6 +15,8 @@ import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import NotesIcon from "@material-ui/icons/Notes";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
+import { ClientsContext } from "../Clients/ClientsProvider";
+
 import {
   Grid,
   Checkbox,
@@ -22,6 +24,7 @@ import {
   CardContent,
   CardHeader,
   CardActions,
+  MenuItem,
   TextField,
   Button,
   FormControlLabel,
@@ -30,6 +33,8 @@ import {
 } from "@material-ui/core";
 
 const CreateSession = ({ sessionId, ...props }) => {
+  const { allClients } = useContext(ClientsContext);
+
   const [session, setSession] = useState({
     clientId: props.clientId || 0,
     date: props.date || "",
@@ -39,6 +44,28 @@ const CreateSession = ({ sessionId, ...props }) => {
     notes: props.notes || "",
     notifications: props.notifications || [],
   });
+
+  const [clientList, setClientList] = useState([]);
+
+  useEffect(() => {
+    if (allClients) {
+      setClientList(
+        allClients
+          .map((client) => {
+            return {
+              id: client.id,
+              name: `${client.first_name} ${client.last_name}`,
+            };
+          })
+          .sort((a, b) => {
+            if (a.name > b.name) {
+              return 1;
+            }
+            return -1;
+          })
+      );
+    }
+  }, [allClients]);
 
   const handleChange = (e) => {
     setSession({
@@ -100,11 +127,18 @@ const CreateSession = ({ sessionId, ...props }) => {
                 <TextField
                   fullWidth
                   name="clientId"
+                  select
                   onChange={handleChange}
                   value={session.clientId}
                   label={"Client"}
                   required
-                />
+                >
+                  {clientList.map((client) => (
+                    <MenuItem key={client.id} value={client.id}>
+                      {client.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
 
               <Grid item xs={1}></Grid>
