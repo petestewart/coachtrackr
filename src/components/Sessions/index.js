@@ -77,6 +77,7 @@ const Sessions = (props) => {
           classes={classes.paper}
           sessionId={modalSession.id}
           handleClose={handleClose}
+          handleDuplicateSession={() => setActiveModal("duplicateSession")}
         />
       ),
       addSession: (
@@ -84,13 +85,23 @@ const Sessions = (props) => {
           style={modalStyle}
           classes={classes.paper}
           handleClose={handleClose}
+          date={'today'}
+        />
+      ),
+      duplicateSession: (
+        <CreateSession
+          style={modalStyle}
+          classes={classes.paper}
+          handleClose={handleClose}
+          {...modalSession}
+          date={dayjs(modalSession.date).add(7, 'day').format('MM/DD/YYYY')}
         />
       ),
       importSessions: (
         <ImportSessions
           style={modalStyle}
           classes={classes.paper}
-          sessionId={modalSession.id}
+          // sessionId={modalSession.id}
           handleClose={handleClose}
         />
       ),

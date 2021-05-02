@@ -6,6 +6,9 @@ import { SessionsContext } from "./SessionsProvider";
 
 // import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Fade from '@material-ui/core/Fade';
 
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
@@ -68,6 +71,8 @@ const SessionDetail = ({ sessionId, ...props }) => {
 
   const [editMode, setEditMode] = useState(false);
   const [session, setSession] = useState({});
+  const [anchorEl, setAnchorEl] = useState(null);
+
 
   const handleChange = (e) => {
     setSession({
@@ -75,6 +80,16 @@ const SessionDetail = ({ sessionId, ...props }) => {
       [e.target.name]: e.target.value,
     });
   };
+
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
 
   useEffect(() => {
     getSessionById(sessionId).then((res) => {
@@ -113,10 +128,24 @@ const SessionDetail = ({ sessionId, ...props }) => {
                 </IconButton>
                 <IconButton
                   aria-label="menu"
+                  aria-controls="simple-menu"
+                  aria-haspopup="true"
+                  onClick={handleMenuOpen}
                   disabled={editMode ? true : false}
                 >
                   <MoreVertIcon />
                 </IconButton>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                  TransitionComponent={Fade}
+                >
+                  <MenuItem onClick={props.handleDuplicateSession}>Duplicate session</MenuItem>
+                  <MenuItem onClick={handleMenuClose}>View client history</MenuItem>
+                </Menu>
                 <IconButton aria-label="cancel" onClick={props.handleClose}>
                   <CloseIcon />
                 </IconButton>
