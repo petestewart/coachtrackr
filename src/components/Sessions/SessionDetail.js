@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
 import dayjs from "dayjs";
+import DayJsUtils from "@date-io/dayjs";
+
 
 import { SessionsContext } from "./SessionsProvider";
 
@@ -34,6 +36,12 @@ import {
   Button,
   ButtonGroup,
 } from "@material-ui/core";
+
+
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
@@ -78,6 +86,13 @@ const SessionDetail = ({ sessionId, ...props }) => {
     setSession({
       ...session,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleDateChange = (date) => {
+    setSession({
+      ...session,
+      date: date,
     });
   };
 
@@ -187,12 +202,15 @@ const SessionDetail = ({ sessionId, ...props }) => {
               </Grid>
               <Grid item xs={10}>
                 {editMode ? (
-                  <TextField
-                    fullWidth
-                    name="date"
-                    onChange={handleChange}
+                  <MuiPickersUtilsProvider utils={DayJsUtils}>
+                  <KeyboardDatePicker
+                    clearable
                     value={session.date}
+                    placeholder={dayjs(new Date()).format('MM/DD/YYYY')}
+                    onChange={(date) => handleDateChange(date)}
+                    format="MM/DD/YYYY"
                   />
+                </MuiPickersUtilsProvider>
                 ) : (
                   dayjs(session.date).format('dddd, MMMM D YYYY')
                 )}

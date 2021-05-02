@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
 
+import dayjs from "dayjs";
+import DayJsUtils from "@date-io/dayjs";
+
 // import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 
@@ -32,13 +35,19 @@ import {
   Radio,
 } from "@material-ui/core";
 
+import {
+  KeyboardDatePicker,
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+
 const CreateSession = ({ sessionId, ...props }) => {
   const { allClients } = useContext(ClientsContext);
 
   const [session, setSession] = useState({
     clientId: props.clientId || 0,
-    date: props.date || "",
-    startTime: props.startTime || "",
+    date: props.date || dayjs(new Date()).format("MM/DD/YYYY"),
+    startTime: props.startTime || dayjs(new Date()).hour(8).minute(0),
     endTime: props.endTime || "",
     isProBono: props.isProBono || false,
     notes: props.notes || "",
@@ -72,6 +81,13 @@ const CreateSession = ({ sessionId, ...props }) => {
       ...session,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleDateTimeChange = (value, key) => {
+    const sessionInfo = { ...session };
+    sessionInfo[key] = value;
+    setSession(sessionInfo);
+    console.log(value)
   };
 
   const handleChecked = (e) => {
@@ -146,13 +162,15 @@ const CreateSession = ({ sessionId, ...props }) => {
                 <EventIcon />
               </Grid>
               <Grid item xs={10}>
-                <TextField
-                  fullWidth
-                  name="date"
-                  onChange={handleChange}
-                  value={session.date}
-                  label={"Date"}
-                />
+                <MuiPickersUtilsProvider utils={DayJsUtils}>
+                  <KeyboardDatePicker
+                    clearable
+                    value={session.date}
+                    placeholder={dayjs(new Date()).format("MM/DD/YYYY")}
+                    onChange={(date) => handleDateTimeChange(date, "date")}
+                    format="MM/DD/YYYY"
+                  />
+                </MuiPickersUtilsProvider>
               </Grid>
 
               <Grid item xs={1}></Grid>
@@ -160,13 +178,22 @@ const CreateSession = ({ sessionId, ...props }) => {
                 <AccessTimeIcon />
               </Grid>
               <Grid item xs={10}>
-                <TextField
+                {/* <TextField
                   fullWidth
                   name="startTime"
                   onChange={handleChange}
                   value={session.startTime}
                   label={"Start Time"}
-                />
+                /> */}
+                <MuiPickersUtilsProvider utils={DayJsUtils}>
+                  <KeyboardTimePicker
+                    // label="Masked timepicker"
+                    placeholder="08:00 AM"
+                    mask="__:__ _M"
+                    value={session.startTime}
+                    onChange={(time) => handleDateTimeChange(time, "startTime")}
+                  />
+                </MuiPickersUtilsProvider>
               </Grid>
 
               <Grid item xs={1}></Grid>
