@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useContext } from "react";
 // import { makeStyles } from "@material-ui/core/styles";
 import dayjs from "dayjs";
+import DayJsUtils from "@date-io/dayjs";
 
 import { SessionsContext } from "./SessionsProvider";
 
 // import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import Fade from '@material-ui/core/Fade';
+import Fade from "@material-ui/core/Fade";
 
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
@@ -34,6 +37,11 @@ import {
   Button,
   ButtonGroup,
 } from "@material-ui/core";
+
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
@@ -73,7 +81,6 @@ const SessionDetail = ({ sessionId, ...props }) => {
   const [session, setSession] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
 
-
   const handleChange = (e) => {
     setSession({
       ...session,
@@ -81,6 +88,14 @@ const SessionDetail = ({ sessionId, ...props }) => {
     });
   };
 
+  console.log(session.startTime);
+
+  const handleDateChange = (date) => {
+    setSession({
+      ...session,
+      date: date,
+    });
+  };
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -89,7 +104,6 @@ const SessionDetail = ({ sessionId, ...props }) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
 
   useEffect(() => {
     getSessionById(sessionId).then((res) => {
@@ -143,8 +157,12 @@ const SessionDetail = ({ sessionId, ...props }) => {
                   onClose={handleMenuClose}
                   TransitionComponent={Fade}
                 >
-                  <MenuItem onClick={props.handleDuplicateSession}>Duplicate session</MenuItem>
-                  <MenuItem onClick={handleMenuClose}>View client history</MenuItem>
+                  <MenuItem onClick={props.handleDuplicateSession}>
+                    Duplicate session
+                  </MenuItem>
+                  <MenuItem onClick={handleMenuClose}>
+                    View client history
+                  </MenuItem>
                 </Menu>
                 <IconButton aria-label="cancel" onClick={props.handleClose}>
                   <CloseIcon />
@@ -163,11 +181,34 @@ const SessionDetail = ({ sessionId, ...props }) => {
               </Grid>
               <Grid item xs={10}>
                 {editMode ? (
-                  <TextField
-                    fullWidth
-                    name="clientName"
-                    onChange={handleChange}
-                    value={session.clientName}
+                  // <TextField
+                  //   fullWidth
+                  //   name="clientId"
+                  //   select
+                  //   onChange={handleChange}
+                  //   value={session.clientId}
+                  // >
+                  //   {props.clientList.map((client) => (
+                  //   <MenuItem key={client.id} value={client.id}>
+                  //     {client.name}
+                  //   </MenuItem>
+                  // ))}
+                  //   </TextField>
+                  <Autocomplete
+                    name="clientId"
+                    value={props.clientList.find(
+                      (client) => client.id === session.clientId
+                    )}
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                        setSession({ ...session, clientId: newValue.id });
+                      }
+                    }}
+                    options={props.clientList}
+                    getOptionLabel={(option) => option.name}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Client name" />
+                    )}
                   />
                 ) : (
                   session.clientName
@@ -180,14 +221,17 @@ const SessionDetail = ({ sessionId, ...props }) => {
               </Grid>
               <Grid item xs={10}>
                 {editMode ? (
-                  <TextField
-                    fullWidth
-                    name="date"
-                    onChange={handleChange}
-                    value={session.date}
-                  />
+                  <MuiPickersUtilsProvider utils={DayJsUtils}>
+                    <KeyboardDatePicker
+                      clearable
+                      value={session.date}
+                      placeholder={dayjs(new Date()).format("MM/DD/YYYY")}
+                      onChange={(date) => handleDateChange(date)}
+                      format="ddd, MMMM D YYYY"
+                    />
+                  </MuiPickersUtilsProvider>
                 ) : (
-                  dayjs(session.date).format('dddd, MMMM D YYYY')
+                  dayjs(session.date).format("dddd, MMMM D YYYY")
                 )}
               </Grid>
               <Grid item xs={1}></Grid>
@@ -195,26 +239,54 @@ const SessionDetail = ({ sessionId, ...props }) => {
               <Grid item xs={"auto"}>
                 <AccessTimeIcon />
               </Grid>
-              <Grid item xs={10}>
-                {editMode ? (
-                  <>
+              {/* <Grid item xs={10}> */}
+              {editMode ? (
+                <>
+                  <Grid item xs={5}>
                     <TextField
-                      fullWidth
+                      error={session.endTime <= session.startTime}
                       name="startTime"
-                      onChange={handleChange}
+                      label="Start Time"
+                      type="time"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{
+                        step: 900, // 15 min
+                      }}
                       value={session.startTime}
+                      onChange={handleChange}
                     />
+                  </Grid>
+                  <Grid item xs={5}>
                     <TextField
-                      fullWidth
+                      error={session.endTime <= session.startTime}
+                      helperText={
+                        session.endTime <= session.startTime
+                          ? "must be later than start time"
+                          : ""
+                      }
                       name="endTime"
+                      label="End Time"
+                      type="time"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{
+                        step: 900, // 15 min
+                      }}
+                      value={session.endTime}
                       onChange={handleChange}
-                      value={session.startTime}
                     />
-                  </>
-                ) : (
-                  `${dayjs(session.startTime, 'H:mm').format('h:mma')} - ${dayjs(session.endTime, 'H:mm').format('h:mma')}`
-                )}
-              </Grid>
+                  </Grid>
+                </>
+              ) : (
+                <Grid item xs={10}>
+                  {dayjs(session.startTime, "H:mm").format("h:mma")} -
+                  {dayjs(session.endTime, "H:mm").format("h:mma")}
+                </Grid>
+              )}
+              {/* </Grid> */}
               <Grid item xs={1}></Grid>
 
               <Grid item xs={"auto"}>
@@ -257,7 +329,11 @@ const SessionDetail = ({ sessionId, ...props }) => {
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
               {editMode ? (
                 <>
-                  <Button color="primary" variant="contained">
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    disabled={session.endTime <= session.startTime}
+                  >
                     Save
                   </Button>
                   <Button
@@ -265,6 +341,7 @@ const SessionDetail = ({ sessionId, ...props }) => {
                     variant="contained"
                     onClick={() => {
                       setEditMode(false);
+                      props.handleClose();
                     }}
                   >
                     Cancel

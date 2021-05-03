@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import dayjs from "dayjs";
 
-
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -13,12 +12,36 @@ import CreateSession from "./CreateSession";
 import ImportSessions from "./ImportSessions";
 
 import { SessionsContext } from "./SessionsProvider";
+import { ClientsContext } from "../Clients/ClientsProvider";
 
 const Sessions = (props) => {
   const [activeModal, setActiveModal] = useState("");
   const [modalSession, setModalSession] = useState({});
   const [manageMode, setManageMode] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [clientList, setClientList] = useState([]);
+
+  const { allClients } = useContext(ClientsContext);
+
+  useEffect(() => {
+    if (allClients) {
+      setClientList(
+        allClients
+          .map((client) => {
+            return {
+              id: client.id,
+              name: `${client.first_name} ${client.last_name}`,
+            };
+          })
+          .sort((a, b) => {
+            if (a.name > b.name) {
+              return 1;
+            }
+            return -1;
+          })
+      );
+    }
+  }, [allClients]);
 
   useEffect(() => {
     if (props.openModal) {
@@ -76,25 +99,28 @@ const Sessions = (props) => {
           style={modalStyle}
           classes={classes.paper}
           sessionId={modalSession.id}
+          clientList={clientList}
           handleClose={handleClose}
           handleDuplicateSession={() => setActiveModal("duplicateSession")}
         />
       ),
       addSession: (
         <CreateSession
+          clientList={clientList}
           style={modalStyle}
           classes={classes.paper}
           handleClose={handleClose}
-          date={'today'}
+          date={dayjs(new Date()).format('MM/DD/YYYY')}
         />
       ),
       duplicateSession: (
         <CreateSession
+          clientList={clientList}
           style={modalStyle}
           classes={classes.paper}
           handleClose={handleClose}
           {...modalSession}
-          date={dayjs(modalSession.date).add(7, 'day').format('MM/DD/YYYY')}
+          date={dayjs(modalSession.date).add(7, "day").format("MM/DD/YYYY")}
         />
       ),
       importSessions: (
@@ -123,7 +149,6 @@ const Sessions = (props) => {
         >
           {activeModal ? modals[activeModal] : ""}
           {/* {activeModal ? <div>active</div> : ""} */}
-
         </Modal>
       </div>
     );
@@ -180,27 +205,28 @@ const Sessions = (props) => {
 
       <SessionModal />
 
-      {sessions.sort((a,b) => dayjs(a.date).valueOf()-dayjs(b.date).valueOf()).map((session, index, array) => (
-        <SessionCard
-          key={index}
-          onClick={() => {
-            if (manageMode) {
-              handleSelect(session.id);
-            } else {
-              setModalSession(session);
-              setActiveModal("sessionDetail");
-            }
-          }}
-          date={session.date}
-          displayDate={index === 0 || session.date !== array[index-1].date}
-          startTime={session.startTime}
-          endTime={session.endTime}
-          clientName={session.clientName}
-          manageMode={manageMode}
-          selected={selected.includes(session.id)}
-        />
-      ))}
-
+      {sessions
+        .sort((a, b) => dayjs(a.date).valueOf() - dayjs(b.date).valueOf())
+        .map((session, index, array) => (
+          <SessionCard
+            key={index}
+            onClick={() => {
+              if (manageMode) {
+                handleSelect(session.id);
+              } else {
+                setModalSession(session);
+                setActiveModal("sessionDetail");
+              }
+            }}
+            date={session.date}
+            displayDate={index === 0 || session.date !== array[index - 1].date}
+            startTime={session.startTime}
+            endTime={session.endTime}
+            clientName={session.clientName}
+            manageMode={manageMode}
+            selected={selected.includes(session.id)}
+          />
+        ))}
     </div>
   );
 };
