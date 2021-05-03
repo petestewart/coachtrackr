@@ -6,6 +6,7 @@ import DayJsUtils from "@date-io/dayjs";
 
 // import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
@@ -47,12 +48,19 @@ const CreateSession = ({ sessionId, ...props }) => {
   const [session, setSession] = useState({
     clientId: props.clientId || 0,
     date: props.date || dayjs(new Date()).format("MM/DD/YYYY"),
-    startTime: props.startTime || dayjs(new Date()).hour(8).minute(0),
-    endTime: props.endTime || "",
+    startTime: props.startTime || "08:00",
+    endTime: props.endTime || "09:00",
     isProBono: props.isProBono || false,
     notes: props.notes || "",
     notifications: props.notifications || [],
   });
+
+  const timeOptions = [...Array(24 * 4)].map((item, index) =>
+    dayjs()
+      .startOf("d")
+      .add(15 * index, "minute")
+      .format("h:mm a")
+  );
 
   const [clientList, setClientList] = useState([]);
 
@@ -77,6 +85,12 @@ const CreateSession = ({ sessionId, ...props }) => {
   }, [allClients]);
 
   const handleChange = (e) => {
+    // if (e.target.name === "startTime" && session.endTime < e.target.value) {
+    //   session.endTime = e.target.value
+    // }
+    // if (e.target.name === "endTime" && session.endTime < e.target.value) {
+    //   session.startTime = e.target.value
+    // }
     setSession({
       ...session,
       [e.target.name]: e.target.value,
@@ -87,7 +101,7 @@ const CreateSession = ({ sessionId, ...props }) => {
     const sessionInfo = { ...session };
     sessionInfo[key] = value;
     setSession(sessionInfo);
-    console.log(value)
+    console.log(value);
   };
 
   const handleChecked = (e) => {
@@ -140,7 +154,7 @@ const CreateSession = ({ sessionId, ...props }) => {
                 <PersonIcon />
               </Grid>
               <Grid item xs={10}>
-                <TextField
+                {/* <TextField
                   fullWidth
                   name="clientId"
                   select
@@ -154,7 +168,20 @@ const CreateSession = ({ sessionId, ...props }) => {
                       {client.name}
                     </MenuItem>
                   ))}
-                </TextField>
+                </TextField> */}
+                <Autocomplete
+                  name="clientId"
+                  onChange={(event, newValue) => {
+                    if (newValue) {
+                      setSession({ ...session, clientId: newValue.id });
+                    }
+                  }}
+                  options={clientList}
+                  getOptionLabel={(option) => option.name}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Client name" />
+                  )}
+                />
               </Grid>
 
               <Grid item xs={1}></Grid>
@@ -168,7 +195,7 @@ const CreateSession = ({ sessionId, ...props }) => {
                     value={session.date}
                     placeholder={dayjs(new Date()).format("MM/DD/YYYY")}
                     onChange={(date) => handleDateTimeChange(date, "date")}
-                    format="MM/DD/YYYY"
+                    format="ddd, MMMM D YYYY"
                   />
                 </MuiPickersUtilsProvider>
               </Grid>
@@ -177,36 +204,52 @@ const CreateSession = ({ sessionId, ...props }) => {
               <Grid item xs={1}>
                 <AccessTimeIcon />
               </Grid>
-              <Grid item xs={10}>
+              <Grid item xs={5}>
                 {/* <TextField
-                  fullWidth
+                  // fullWidth
+                  label={"start"}
                   name="startTime"
                   onChange={handleChange}
                   value={session.startTime}
-                  label={"Start Time"}
                 /> */}
-                <MuiPickersUtilsProvider utils={DayJsUtils}>
-                  <KeyboardTimePicker
-                    // label="Masked timepicker"
-                    placeholder="08:00 AM"
-                    mask="__:__ _M"
-                    value={session.startTime}
-                    onChange={(time) => handleDateTimeChange(time, "startTime")}
-                  />
-                </MuiPickersUtilsProvider>
-              </Grid>
-
-              <Grid item xs={1}></Grid>
-              <Grid item xs={1}>
-                <HourglassFullIcon />
-              </Grid>
-              <Grid item xs={10}>
                 <TextField
-                  fullWidth
-                  name="endTime"
+                  error = {session.endTime <= session.startTime}
+                  name="startTime"
+                  label="Start Time"
+                  type="time"
+                  // defaultValue="08:00"
+                  // className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  inputProps={{
+                    step: 900, // 15 min
+                  }}
+                  value={session.startTime}
                   onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={5}>
+                <TextField
+                  error = {session.endTime <= session.startTime}
+                  helperText = {
+                    session.endTime <= session.startTime
+                    ? 'must be later than start time'
+                    : ''
+                  }
+                  name="endTime"
+                  label="End Time"
+                  type="time"
+                  // defaultValue="09:00"
+                  // className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  inputProps={{
+                    step: 900, // 15 min
+                  }}
                   value={session.endTime}
-                  label={"Duration"}
+                  onChange={handleChange}
                 />
               </Grid>
 
@@ -258,7 +301,7 @@ const CreateSession = ({ sessionId, ...props }) => {
 
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
               <>
-                <Button color="primary" variant="contained">
+                <Button color="primary" variant="contained" disabled={session.endTime <= session.startTime}>
                   Save
                 </Button>
                 <Button
