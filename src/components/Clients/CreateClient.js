@@ -32,8 +32,9 @@ const CreateClient = ({ clientId, ...props }) => {
     last_name: "",
     phone: "",
     email: "",
-    isCurrent: true,
+    isActive: true,
     isGroup: false,
+    notes: ""
   });
 
   const handleChange = (e) => {
@@ -173,9 +174,9 @@ const CreateClient = ({ clientId, ...props }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={client.isCurrent}
+                      checked={client.isActive}
                       onChange={handleChecked}
-                      name="isCurrent"
+                      name="isActive"
                     />
                   }
                   label="Current client"

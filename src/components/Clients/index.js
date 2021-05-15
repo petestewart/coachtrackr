@@ -33,9 +33,8 @@ const Clients = (props) => {
   const [clients, setClients] = useState([]);
   const [deleteWarning, setDeleteWarning] = useState(false);
 
-  const { removeClients, createClient, allClients } = useContext(
-    ClientsContext
-  );
+  const { removeClients, createClient, allClients, getClients } =
+    useContext(ClientsContext);
 
   useEffect(() => {
     if (allClients) {
@@ -75,8 +74,11 @@ const Clients = (props) => {
     setSearchValue((prevState) => e.target.value);
   };
 
-  const createNewClient = (newClient) => {
-    createClient(newClient);
+  const handleCreateNewClient = (newClient) => {
+    createClient(newClient)
+      .then((res) => {
+        console.log(res)
+        setClients(res)})
     setActiveModal("");
   };
 
@@ -118,7 +120,7 @@ const Clients = (props) => {
           classes={classes.paper}
           clientId={modalClient.id}
           handleClose={handleClose}
-          handleCreateClient={createNewClient}
+          handleCreateClient={handleCreateNewClient}
         />
       ),
       importClients: (
