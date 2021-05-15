@@ -71,6 +71,30 @@ const Sessions = (props) => {
     }
   };
 
+  const handleAddSession = (session) => {
+    createSession(session).then((res) => {
+      const client = clientList.find(
+        (client) => client.id === session.clientId
+      );
+      const updatedSessionList = [
+        ...sessions,
+        {
+          ...session,
+          clientName: client.name,
+        },
+      ];
+      setSessions(updatedSessionList);
+    });
+    setActiveModal("");
+  };
+
+  // const handleAddSession = (session) => {
+  //   createSession(session)
+  //     .then((res) => {
+  //       setSessions(res)})
+  //   setActiveModal("");
+  // };
+
   const modalStyle = {
     top: "50%",
     left: "50%",
@@ -110,7 +134,8 @@ const Sessions = (props) => {
           style={modalStyle}
           classes={classes.paper}
           handleClose={handleClose}
-          date={dayjs(new Date()).format('MM/DD/YYYY')}
+          handleAddSession={handleAddSession}
+          date={dayjs(new Date()).format("MM/DD/YYYY")}
         />
       ),
       duplicateSession: (
@@ -156,13 +181,33 @@ const Sessions = (props) => {
 
   const [sessions, setSessions] = useState([]);
 
-  const { getSessions } = useContext(SessionsContext);
+  const { getSessions, createSession, allSessions } =
+    useContext(SessionsContext);
+
+  // useEffect(() => {
+  //   getSessions().then((res) => {
+  //     setSessions(res);
+  //   });
+  // }, []);
+
+  // const updateSessionsList = () => {
+  //   getSessions()
+  //     .then((res) => {setSessions(res)})
+  // }
+
+  // useEffect(() => {
+  //   if (allSessions) {
+  //     updateSessionsList()
+  //   }
+  // }, [allSessions])
 
   useEffect(() => {
-    getSessions().then((res) => {
-      setSessions(res);
-    });
-  }, []);
+    if (allSessions) {
+      getSessions().then((res) => {
+        setSessions(res);
+      });
+    }
+  }, [allSessions]);
 
   return (
     <div className="Sessions">

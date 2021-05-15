@@ -14,7 +14,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import PersonIcon from "@material-ui/icons/Person";
 import EventIcon from "@material-ui/icons/Event";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import HourglassFullIcon from "@material-ui/icons/HourglassFull";
+// import HourglassFullIcon from "@material-ui/icons/HourglassFull";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import NotesIcon from "@material-ui/icons/Notes";
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -28,17 +28,17 @@ import {
   CardContent,
   CardHeader,
   CardActions,
-  MenuItem,
+  // MenuItem,
   TextField,
   Button,
   FormControlLabel,
-  RadioGroup,
-  Radio,
+  // RadioGroup,
+  // Radio,
 } from "@material-ui/core";
 
 import {
   KeyboardDatePicker,
-  KeyboardTimePicker,
+  // KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 
@@ -55,12 +55,12 @@ const CreateSession = ({ sessionId, ...props }) => {
     notifications: props.notifications || [],
   });
 
-  const timeOptions = [...Array(24 * 4)].map((item, index) =>
-    dayjs()
-      .startOf("d")
-      .add(15 * index, "minute")
-      .format("h:mm a")
-  );
+  // const timeOptions = [...Array(24 * 4)].map((item, index) =>
+  //   dayjs()
+  //     .startOf("d")
+  //     .add(15 * index, "minute")
+  //     .format("h:mm a")
+  // );
 
   const [clientList, setClientList] = useState([]);
 
@@ -213,7 +213,7 @@ const CreateSession = ({ sessionId, ...props }) => {
                   value={session.startTime}
                 /> */}
                 <TextField
-                  error = {session.endTime <= session.startTime}
+                  error={session.endTime <= session.startTime}
                   name="startTime"
                   label="Start Time"
                   type="time"
@@ -231,11 +231,11 @@ const CreateSession = ({ sessionId, ...props }) => {
               </Grid>
               <Grid item xs={5}>
                 <TextField
-                  error = {session.endTime <= session.startTime}
-                  helperText = {
+                  error={session.endTime <= session.startTime}
+                  helperText={
                     session.endTime <= session.startTime
-                    ? 'must be later than start time'
-                    : ''
+                      ? "must be later than start time"
+                      : ""
                   }
                   name="endTime"
                   label="End Time"
@@ -301,7 +301,12 @@ const CreateSession = ({ sessionId, ...props }) => {
 
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
               <>
-                <Button color="primary" variant="contained" disabled={session.endTime <= session.startTime}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={() => props.handleAddSession(session)}
+                  disabled={session.endTime <= session.startTime}
+                >
                   Save
                 </Button>
                 <Button

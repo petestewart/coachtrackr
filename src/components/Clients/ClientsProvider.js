@@ -21,7 +21,7 @@ export const ClientsProvider = (props) => {
 
   const createClient = (newClient) =>
     new Promise((resolve) => {
-      const client = { ...newClient, id: allClients.length + 1, pastSessions: 0, upcomingSessions: [] };
+      const client = { ...newClient, id: allClients[allClients.length - 1].id + 1, pastSessions: 0, upcomingSessions: [] };
       const newClientList = [...allClients, client];
       setAllClients((prevState) => [...prevState, client]);
       resolve(newClientList);

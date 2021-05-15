@@ -77,7 +77,6 @@ const Clients = (props) => {
   const handleCreateNewClient = (newClient) => {
     createClient(newClient)
       .then((res) => {
-        console.log(res)
         setClients(res)})
     setActiveModal("");
   };

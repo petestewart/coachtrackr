@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import SESSIONS from "../../DUMMYDATA/SESSIONS.json";
 import CLIENTS from "../../DUMMYDATA/CLIENTS.json";
@@ -6,25 +6,36 @@ import CLIENTS from "../../DUMMYDATA/CLIENTS.json";
 export const SessionsContext = React.createContext();
 
 export const SessionsProvider = (props) => {
+  const [allSessions, setAllSessions] = useState(SESSIONS)
 
   // const getSessions = () => SESSIONS;
 
   const getSessions = () => new Promise((resolve) => {
-    resolve(SESSIONS.map((session) => {
+    resolve(allSessions.map((session) => {
       const client = CLIENTS.filter(client => client.id === session.clientId)[0]
       session.clientName = `${client.first_name} ${client.last_name}`
       return session
     }))
   })
 
+  const createSession = (newSession) =>
+    new Promise((resolve) => {
+      const session = { ...newSession, id: allSessions[allSessions.length - 1].id + 1 };
+      // const newSessionList = [...sessions, session];
+      setAllSessions((prevState) => [...prevState, session]);
+      // resolve(newSessionList);
+      getSessions()
+        .then((res) => {resolve(res)})
+    });
+
   const getSessionById =(sessionId) => new Promise((resolve) => {
-    resolve(SESSIONS.filter(session => session.id === sessionId)[0])
+    resolve(allSessions.filter(session => session.id === sessionId)[0])
   })
 
   return (
     <SessionsContext.Provider
       value={{
-        getSessions, getSessionById
+        getSessions, getSessionById, createSession, allSessions
       }}
     >
       {props.children}
