@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import dayjs from "dayjs";
 
 import Modal from "@material-ui/core/Modal";
+import Alert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 
@@ -20,6 +21,8 @@ const Sessions = (props) => {
   const [manageMode, setManageMode] = useState(false);
   const [selected, setSelected] = useState([]);
   const [clientList, setClientList] = useState([]);
+  const [deleteWarning, setDeleteWarning] = useState(false);
+
 
   const { allClients } = useContext(ClientsContext);
 
@@ -181,7 +184,7 @@ const Sessions = (props) => {
 
   const [sessions, setSessions] = useState([]);
 
-  const { getSessions, createSession, allSessions } =
+  const { getSessions, createSession, allSessions, removeSessions } =
     useContext(SessionsContext);
 
   // useEffect(() => {
@@ -213,6 +216,44 @@ const Sessions = (props) => {
     <div className="Sessions">
       <h1>Sessions</h1>
       {manageMode ? (
+        deleteWarning ? (
+          <>
+            <Alert severity="error">
+              <strong>
+                Are you sure you want to delete{" "}
+                {selected.length === 1
+                  ? "this session"
+                  : `these ${selected.length} sessions`}
+                ?
+              </strong>{" "}
+              <br />
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={() => {
+                  setDeleteWarning(false);
+                  const updatedSessions = removeSessions(selected);
+                  setSessions(updatedSessions)            
+                  handleClose();
+                  setSelected([]);
+                }}
+              >
+                Yes, Delete {selected.length === 1 ? "session" : "sessions"}
+              </Button>
+              <Button
+                color="secondary"
+                variant="outlined"
+                onClick={() => {
+                  setDeleteWarning(false);
+                }}
+              >
+                No, Cancel
+              </Button>
+            </Alert>
+          </>
+        ) : (
+
+
         <>
           <ButtonGroup
             color="primary"
@@ -241,16 +282,31 @@ const Sessions = (props) => {
               Cancel
             </Button>
           </ButtonGroup>
+          {selected.length > 0 ? (
+              <ButtonGroup color="" aria-label="outlined primary button group">
+                <Button
+                  onClick={() => {
+                    setDeleteWarning(true);
+                  }}
+                >
+                  Delete {selected.length === 1 ? "session" : "sessions"}
+                </Button>
+              </ButtonGroup>
+            ) : (
+              ""
+            )}
           <br />
           {`${selected.length} sessions selected`}
         </>
+        )
       ) : (
         ""
       )}
 
       <SessionModal />
 
-      {sessions
+      {sessions ?
+        sessions
         .sort((a, b) => dayjs(a.date).valueOf() - dayjs(b.date).valueOf())
         .map((session, index, array) => (
           <SessionCard
@@ -271,7 +327,8 @@ const Sessions = (props) => {
             manageMode={manageMode}
             selected={selected.includes(session.id)}
           />
-        ))}
+        ))
+      : 'You have no sessions'}
     </div>
   );
 };

@@ -49,10 +49,6 @@ export const ClientsProvider = (props) => {
   
 
   const removeClients = (clients) => {
-    // const promises = clients.map((clientId) => removeClient(clientId));
-    // Promise.all(promises).then(() => {
-    //   return allClients;
-    // });
     let newClientList = [...allClients]
     clients.forEach((clientId) => {
       newClientList = [...newClientList].map((client) => 
