@@ -75,9 +75,9 @@ const Clients = (props) => {
   };
 
   const handleCreateNewClient = (newClient) => {
-    createClient(newClient)
-      .then((res) => {
-        setClients(res)})
+    createClient(newClient).then((res) => {
+      setClients(res);
+    });
     setActiveModal("");
   };
 
@@ -220,7 +220,14 @@ const Clients = (props) => {
                 color="secondary"
                 variant="contained"
                 onClick={() => {
-                  removeClients(selected);
+                  setDeleteWarning(false);
+                  const updatedClients = removeClients(selected);
+                  setClients(updatedClients)
+                  // const promises = clients.map((clientId) => removeClient(clientId));
+                  // Promise.all(promises).then(() => {
+                  //   setClients(allClients);
+                  // });
+                  
                   handleClose();
                   setSelected([]);
                 }}
