@@ -12,6 +12,7 @@ import Help from "../Help";
 import ScrollToTop from "../UI/ScrollToTop";
 
 import SideNavDrawer from "../SideNav/SideNavDrawer"
+import AccountSettings from "../Settings/AccountSettings";
 
 const ApplicationViews = (props) => {
   const [clientsModal, setClientsModal] = useState('')
@@ -98,6 +99,14 @@ const ApplicationViews = (props) => {
         exact
         path="/settings"
         render={(props) => <Settings history={props.history} {...props} />}
+      />
+
+      {/* Settings > Account Settings */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/account"
+        render={(props) => <AccountSettings history={props.history} {...props} />}
       />
 
       {/* Help */}
