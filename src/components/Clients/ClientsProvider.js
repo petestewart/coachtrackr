@@ -21,7 +21,7 @@ export const ClientsProvider = (props) => {
 
   const createClient = (newClient) =>
     new Promise((resolve) => {
-      const client = { ...newClient, id: allClients.length };
+      const client = { ...newClient, id: allClients[allClients.length - 1].id + 1, pastSessions: 0, upcomingSessions: [] };
       const newClientList = [...allClients, client];
       setAllClients((prevState) => [...prevState, client]);
       resolve(newClientList);
@@ -38,22 +38,24 @@ export const ClientsProvider = (props) => {
       resolve(newClientList);
     });
 
-  const removeClient = (clientId) => {
+  const removeClient = (clientId) => 
     new Promise((resolve) => {
-      console.log('about to remove client #', clientId)
       const updatedClients = [...allClients].map((client) =>
         client.id === clientId ? { ...client, isActive: false } : client
       );
       setAllClients(updatedClients);
       resolve("");
     });
-  };
+  
 
   const removeClients = (clients) => {
-    const promises = clients.map((clientId) => removeClient(clientId));
-    Promise.all(promises).then(() => {
-      return allClients;
-    });
+    let newClientList = [...allClients]
+    clients.forEach((clientId) => {
+      newClientList = [...newClientList].map((client) => 
+        client.id === clientId ? { ...client, isActive: false } : client );
+      })
+    setAllClients(newClientList)
+    return newClientList;
   };
 
   // const createClient = (client) => {

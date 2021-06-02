@@ -6,6 +6,7 @@ import DayJsUtils from "@date-io/dayjs";
 import { SessionsContext } from "./SessionsProvider";
 
 // import Box from "@material-ui/core/Box";
+import Alert from "@material-ui/lab/Alert";
 import Avatar from "@material-ui/core/Avatar";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
@@ -75,9 +76,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SessionDetail = ({ sessionId, ...props }) => {
-  const { getSessionById } = useContext(SessionsContext);
+  const { getSessionById, removeSession } = useContext(SessionsContext);
 
   const [editMode, setEditMode] = useState(false);
+  const [deleteWarning, setDeleteWarning] = useState(false);
   const [session, setSession] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -328,25 +330,64 @@ const SessionDetail = ({ sessionId, ...props }) => {
 
             <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
               {editMode ? (
-                <>
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    disabled={session.endTime <= session.startTime}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    onClick={() => {
-                      setEditMode(false);
-                      props.handleClose();
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </>
+                deleteWarning ? (
+                  <>
+                    <Alert severity="error">
+                      <strong>
+                        Are you sure you want to delete this session?
+                      </strong>
+                    </Alert>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={() => {
+                        removeSession(sessionId);
+                        setDeleteWarning(false);
+                        props.handleClose();
+                      }}
+                    >
+                      Yes, delete session
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="outlined"
+                      onClick={() => {
+                        setDeleteWarning(false);
+                      }}
+                    >
+                      No, Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      disabled={session.endTime <= session.startTime}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={() => {
+                        setEditMode(false);
+                        props.handleClose();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="outlined"
+                      onClick={() => {
+                        setDeleteWarning(true);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                )
               ) : (
                 ""
               )}
