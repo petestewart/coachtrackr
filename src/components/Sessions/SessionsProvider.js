@@ -47,13 +47,22 @@ export const SessionsProvider = (props) => {
   const removeSessions = (sessions) => {
     let newSessionList = [...allSessions];
     sessions.forEach((sessionId) => {
-      newSessionList = [...newSessionList].filter((session) =>
-        session.id !== sessionId
+      newSessionList = [...newSessionList].filter(
+        (session) => session.id !== sessionId
       );
     });
     setAllSessions(newSessionList);
     return newSessionList;
   };
+
+  const removeSession = (sessionId) =>
+    new Promise((resolve) => {
+      const updatedSessions = [...allSessions].filter(
+        (session) => session.id !== sessionId
+      );
+      setAllSessions(updatedSessions);
+      resolve("");
+    });
 
   return (
     <SessionsContext.Provider
@@ -62,6 +71,7 @@ export const SessionsProvider = (props) => {
         getSessionById,
         createSession,
         allSessions,
+        removeSession,
         removeSessions,
       }}
     >
