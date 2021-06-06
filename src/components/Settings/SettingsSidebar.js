@@ -13,13 +13,13 @@ import ShareRoundedIcon from '@material-ui/icons/ShareRounded';
 import Sidebar from "../UI/Sidebar";
 
 const items = [
-  { name: "account", label: "Account", Icon: AccountCircleIcon, route: "/account" },
-  { name: "notifications", label: "Notifications", Icon: NotificationsIcon, route: "/notifications" },
-  { name: "external", label: "External Apps", Icon: SyncIcon, route: "/external" },
-  { name: "cceu", label: "CCEU", Icon: TimelineIcon, route:"cceu" },
-  { name: "about", label: "About", Icon: InfoIcon, route:"about" },
-  { name: "help", label: "Help", Icon: HelpOutlineIcon, route:"help" },
-  { name: "share", label: "Share CoachTrackr!", Icon: ShareRoundedIcon, route: "/share" },
+  { name: "account", label: "Account", Icon: AccountCircleIcon, route: "settings-account" },
+  { name: "notifications", label: "Notifications", Icon: NotificationsIcon, route: "settings-notifications" },
+  { name: "external", label: "External Apps", Icon: SyncIcon, route: "settings-external" },
+  { name: "cceu", label: "CCEU", Icon: TimelineIcon, route: "settings-cceu" },
+  { name: "about", label: "About", Icon: InfoIcon, route: "settings-about" },
+  { name: "help", label: "Help", Icon: HelpOutlineIcon, route: "settings-help" },
+  { name: "share", label: "Share CoachTrackr!", Icon: ShareRoundedIcon, route: "settings-share" },
 ];
 
 const SettingsSidebar = () => {

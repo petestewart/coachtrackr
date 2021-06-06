@@ -12,6 +12,8 @@ import Help from "../Help";
 import ScrollToTop from "../UI/ScrollToTop";
 
 import SideNavDrawer from "../SideNav/SideNavDrawer"
+import AccountSettings from "../Settings/AccountSettings";
+import NotificationsSettings from "../Settings/NotificationsSettings";
 
 const ApplicationViews = (props) => {
   const [clientsModal, setClientsModal] = useState('')
@@ -98,6 +100,22 @@ const ApplicationViews = (props) => {
         exact
         path="/settings"
         render={(props) => <Settings history={props.history} {...props} />}
+      />
+
+      {/* Settings > Account Settings */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/settings-account"
+        render={(props) => <AccountSettings history={props.history} {...props} />}
+      />
+
+      {/* Settings > Notifications Settings */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/settings-notifications"
+        render={(props) => <NotificationsSettings history={props.history} {...props} />}
       />
 
       {/* Help */}

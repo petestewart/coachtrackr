@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 
 import { ClientsProvider } from "./components/Clients/ClientsProvider";
 import { SessionsProvider } from "./components/Sessions/SessionsProvider";
+import { SettingsProvider } from "./components/Settings/SettingsProvider";
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
       <ThemeProvider theme={theme}>
         <ClientsProvider>
           <SessionsProvider>
-            <Layout />
+            <SettingsProvider>
+              <Layout />
+            </SettingsProvider>
           </SessionsProvider>
         </ClientsProvider>
       </ThemeProvider>
