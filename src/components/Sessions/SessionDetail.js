@@ -76,7 +76,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SessionDetail = ({ sessionId, ...props }) => {
-  const { getSessionById, removeSession } = useContext(SessionsContext);
+  const { getSessionById, removeSession, updateSession } =
+    useContext(SessionsContext);
 
   const [editMode, setEditMode] = useState(false);
   const [deleteWarning, setDeleteWarning] = useState(false);
@@ -364,6 +365,9 @@ const SessionDetail = ({ sessionId, ...props }) => {
                       color="primary"
                       variant="contained"
                       disabled={session.endTime <= session.startTime}
+                      onClick={() => {
+                        updateSession(session)
+                      }}
                     >
                       Save
                     </Button>

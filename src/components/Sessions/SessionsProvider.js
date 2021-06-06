@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-
 import SESSIONS from "../../DUMMYDATA/SESSIONS.json";
 import CLIENTS from "../../DUMMYDATA/CLIENTS.json";
 
@@ -9,7 +8,6 @@ export const SessionsContext = React.createContext();
 
 export const SessionsProvider = (props) => {
   const [allSessions, setAllSessions] = useState(SESSIONS);
-
 
   // const getSessions = () => SESSIONS;
 
@@ -34,9 +32,20 @@ export const SessionsProvider = (props) => {
         ...newSession,
         id: allSessions[allSessions.length - 1].id + 1,
       };
-      // const newSessionList = [...sessions, session];
       setAllSessions((prevState) => [...prevState, session]);
-      // resolve(newSessionList);
+      getSessions().then((res) => {
+        resolve(res);
+      });
+    });
+
+  const updateSession = (updatedSession) =>
+    new Promise((resolve) => {
+      const index = allSessions.findIndex(
+        (session) => session.id === updatedSession.id
+      );
+      const sessionList = [...allSessions]
+      sessionList[index] = updatedSession
+      setAllSessions(sessionList);
       getSessions().then((res) => {
         resolve(res);
       });
@@ -76,6 +85,7 @@ export const SessionsProvider = (props) => {
         allSessions,
         removeSession,
         removeSessions,
+        updateSession
       }}
     >
       {props.children}
