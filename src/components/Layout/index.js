@@ -8,13 +8,12 @@ const Layout = () => {
   const [hideMainNav, setHideMainNav] = useState(false);
   const [hideNavLabels, setHideNavLabels] = useState(false);
 
-
   const [openModal, setOpenModal] = useState("");
 
   const location = useLocation();
 
   useEffect(() => {
-    setHideMainNav(location.pathname.substring(0,9) === "/settings");
+    setHideMainNav(location.pathname.substring(0, 9) === "/settings");
   }, [location]);
 
 

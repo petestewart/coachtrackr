@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AccountSettings = ({ userId, ...props }) => {
-  const { getAccountSettings, updateAccountSettings } =
+  const { getAccountSettings, updateAccountSettings, bookmark } =
     useContext(SettingsContext);
 
   const [editMode, setEditMode] = useState(false);
@@ -92,7 +92,7 @@ const AccountSettings = ({ userId, ...props }) => {
 
   return (
     <>
-      <SettingsSidebar />
+      <SettingsSidebar backButtonDest={bookmark} />
       <div className="main-content">
         <div className="settings">
           <h2>Account</h2>

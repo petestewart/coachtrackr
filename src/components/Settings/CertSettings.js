@@ -6,15 +6,7 @@ import { SettingsContext } from "./SettingsProvider";
 
 import SettingsSidebar from "./SettingsSidebar";
 
-
-
-
-
-import {
-  makeStyles,
-
-} from "@material-ui/core";
-
+import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,13 +19,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const CertSettings = ({ userId, ...props }) => {
-  const { getCertSettings, updateCertSettings } =
+  const { getCertSettings, updateCertSettings, bookmark } =
     useContext(SettingsContext);
 
-  const [certSettings, setCertSettings] = useState({
-  });
+  const [certSettings, setCertSettings] = useState({});
 
   const classes = useStyles();
 
@@ -52,16 +42,13 @@ const CertSettings = ({ userId, ...props }) => {
   //   });
   // }, []);
 
-
   return (
     <>
-      <SettingsSidebar />
+      <SettingsSidebar backButtonDest={bookmark} />
       <div className="main-content">
         <div className="settings">
           <div style={props.style} className={props.classes}>
-            
             <h2>CCEU Settings</h2>
-              
           </div>
         </div>
       </div>

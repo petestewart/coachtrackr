@@ -7,6 +7,7 @@ import Sessions from "../Sessions";
 import Sync from "../Sync";
 import CCEU from "../CCEU";
 import Settings from "../Settings";
+import Help from "../Help";
 
 import ScrollToTop from "../UI/ScrollToTop";
 
@@ -16,7 +17,6 @@ import NotificationsSettings from "../Settings/NotificationsSettings";
 import ExternalAppsSettings from "../Settings/ExternalAppsSettings";
 import CertSettings from "../Settings/CertSettings";
 import About from "../Settings/About";
-import Help from "../Settings/Help";
 import Share from "../Settings/Share";
 
 const ApplicationViews = (props) => {

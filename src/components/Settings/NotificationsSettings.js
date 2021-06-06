@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 // }));
 
 const NotificationSettings = ({ userId, ...props }) => {
-  const { getNotificationSettings, updateNotificationSettings } =
+  const { getNotificationSettings, updateNotificationSettings, bookmark } =
     useContext(SettingsContext);
 
   const [notificationSettings, setNotificationSettings] = useState({
@@ -117,7 +117,7 @@ const NotificationSettings = ({ userId, ...props }) => {
 
   return (
     <>
-      <SettingsSidebar />
+      <SettingsSidebar backButtonDest={bookmark} />
       <div className="main-content">
         <div className="settings">
           {/* <h2>Account</h2> */}

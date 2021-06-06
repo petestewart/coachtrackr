@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ExternalAppSettings = ({ userId, ...props }) => {
-  const { getExternalAppSettings, updateExternalAppSettings } =
+  const { getExternalAppSettings, updateExternalAppSettings, bookmark } =
     useContext(SettingsContext);
 
   const [externalAppSettings, setExternalAppSettings] = useState({
@@ -55,7 +55,7 @@ const ExternalAppSettings = ({ userId, ...props }) => {
 
   return (
     <>
-      <SettingsSidebar />
+      <SettingsSidebar backButtonDest={bookmark} />
       <div className="main-content">
         <div className="settings">
           <div style={props.style} className={props.classes}>

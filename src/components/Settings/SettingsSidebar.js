@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -16,52 +16,59 @@ const items = [
     name: "account",
     label: "Account",
     Icon: AccountCircleIcon,
-    route: "settings-account",
+    route: "/settings-account",
   },
   {
     name: "notifications",
     label: "Notifications",
     Icon: NotificationsIcon,
-    route: "settings-notifications",
+    route: "/settings-notifications",
   },
   {
     name: "external",
     label: "External Apps",
     Icon: SyncIcon,
-    route: "settings-external",
+    route: "/settings-external",
   },
   {
     name: "cceu",
     label: "CCEU",
     Icon: TimelineIcon,
-    route: "settings-cceu",
+    route: "/settings-cceu",
   },
   {
     name: "about",
     label: "About",
     Icon: InfoIcon,
-    route: "settings-about",
+    route: "/settings-about",
   },
   {
     name: "help",
     label: "Help",
     Icon: HelpOutlineIcon,
-    route: "settings-help",
+    route: "/help",
   },
   {
     name: "share",
     label: "Share CoachTrackr!",
     Icon: ShareRoundedIcon,
-    route: "settings-share",
+    route: "/settings-share",
   },
 ];
 
 const SettingsSidebar = (props) => {
   const history = useHistory();
 
+  const location = useLocation();
+
   return (
     <div>
-      <Sidebar items={items} backButton={true} />
+      <Sidebar
+        items={items}
+        backButton={true}
+        backButtonDest={props.backButtonDest}
+        activePath={location.pathname}
+      />
     </div>
   );
 };
