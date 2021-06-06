@@ -8,6 +8,7 @@ const Layout = () => {
   const [hideMainNav, setHideMainNav] = useState(false);
   const [hideNavLabels, setHideNavLabels] = useState(false);
 
+
   const [openModal, setOpenModal] = useState("");
 
   const location = useLocation();
