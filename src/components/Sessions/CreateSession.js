@@ -178,18 +178,12 @@ const CreateSession = ({ sessionId, ...props }) => {
                   ))}
                 </TextField> */}
 
-                {duplicated && clientList.length > 0 ? (
-                  <TextField
-                    defaultValue={
-                      clientList.find((client) => client.id === props.clientId)
-                        .name || ""
-                    }
-                    onClick={() => {setDuplicated(false)}}
-                  />
-                ) : (
+                
                   <Autocomplete
-                    autocomplete
                     name="clientId"
+                    value={props.clientList.find(
+                      (client) => client.id === session.clientId
+                    )}
                     onChange={(event, newValue) => {
                       if (newValue) {
                         setSession({ ...session, clientId: newValue.id });
@@ -201,7 +195,6 @@ const CreateSession = ({ sessionId, ...props }) => {
                       <TextField {...params} label="Client name" />
                     )}
                   />
-                )}
               </Grid>
 
               <Grid item xs={1}></Grid>
