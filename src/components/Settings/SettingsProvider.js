@@ -9,14 +9,38 @@ export const SettingsProvider = (props) => {
 
   const getAccountSettings = () =>
     new Promise((resolve) => {
-      resolve(allSettings);
+      const accountSettings = {
+        name: allSettings.name,
+        email: allSettings.email,
+        location: allSettings.location,
+        currentCertification: allSettings.currentCertification,
+      };
+      resolve(accountSettings);
     });
 
-  
+  const getNotificationSettings = () =>
+    new Promise((resolve) => {
+      const notifications = {...allSettings.notifications}
+      const notificationSettings = {
+        sessionReminderHoursBefore: notifications.sessionReminderHoursBefore,
+        clientMilestonesMonth: notifications.clientMilestonesMonth,
+        clientMilestonesYear: notifications.clientMilestonesYear,
+        topClient: notifications.topClient,
+        certificationRequirements: notifications.certificationRequirements,
+        certificationAccomplishments: notifications.certificationAccomplishments,
+      };
+      resolve(notificationSettings);
+    });
 
   const updateAccountSettings = (updatedSettings) =>
     new Promise((resolve) => {
-      setAllSettings(updatedSettings);
+      setAllSettings(...allSettings, updatedSettings);
+      resolve(updatedSettings);
+    });
+
+  const updateNotificationSettings = (updatedSettings) =>
+    new Promise((resolve) => {
+      setAllSettings(...allSettings, updatedSettings);
       resolve(updatedSettings);
     });
 
@@ -25,6 +49,8 @@ export const SettingsProvider = (props) => {
       value={{
         getAccountSettings,
         updateAccountSettings,
+        getNotificationSettings,
+        updateNotificationSettings,
         allSettings,
       }}
     >

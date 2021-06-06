@@ -13,7 +13,7 @@ const Layout = () => {
   const location = useLocation();
 
   useEffect(() => {
-    setHideMainNav(location.pathname === "/settings");
+    setHideMainNav(location.pathname.substring(0,9) === "/settings");
   }, [location]);
 
 

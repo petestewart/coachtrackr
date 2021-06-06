@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 // import { makeStyles } from "@material-ui/core/styles";
 
 import { SettingsContext } from "./SettingsProvider";
+
+import SettingsSidebar from "../Settings/SettingsSidebar";
 
 // import Box from "@material-ui/core/Box";
 
@@ -64,12 +67,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AccountSettings = ({ userId, ...props }) => {
-  const { getAccountSettings, updateAccountSettings } = useContext(SettingsContext);
+  const { getAccountSettings, updateAccountSettings } =
+    useContext(SettingsContext);
 
   const [editMode, setEditMode] = useState(false);
   const [deleteWarning, setDeleteWarning] = useState(false);
   const [accountSettings, setAccountSettings] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const history = useHistory();
 
   const handleChange = (e) => {
     setAccountSettings({
@@ -104,130 +110,58 @@ const AccountSettings = ({ userId, ...props }) => {
   // const classes = useStyles();
 
   return (
-    <div style={props.style} className={props.classes}>
-      <form>
-        <Card>
-          <CardHeader
-            avatar={
-              <Avatar>
-                {accountSettings.firstName && accountSettings.firstName.charAt(0)}
-                {accountSettings.lastName && accountSettings.lastName.charAt(0)}
-              </Avatar>
-            }
-            action={
-              <div className="buttonsGroup">
-                <IconButton
-                  aria-label="edit"
-                  onClick={toggleEditMode}
-                  style={
-                    editMode ? { color: "blue", backgroundColor: "grey" } : {}
-                  }
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  aria-label="menu"
-                  aria-controls="simple-menu"
-                  aria-haspopup="true"
-                  onClick={handleMenuOpen}
-                  disabled={editMode ? true : false}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-                <Menu
-                  id="simple-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                  TransitionComponent={Fade}
-                >
-                  <MenuItem onClick={props.openAddSessionWindow}>
-                    Book session
-                  </MenuItem>
-                  <MenuItem onClick={handleMenuClose}>
-                    View client history
-                  </MenuItem>
-                </Menu>
-                <IconButton aria-label="cancel" onClick={props.handleClose}>
-                  <CloseIcon />
-                </IconButton>
-              </div>
-            }
-            // title={`${accountSettings.firstName} ${accountSettings.lastName}`}
-            title={
-              editMode ? (
-                <>
-                  <TextField
-                    // fullWidth
-                    helperText="First name"
-                    name="first_name"
-                    onChange={handleChange}
-                    required
-                    value={accountSettings.firstName}
-                  />
-                  {"  "}
-                  <TextField
-                    // fullWidth
-                    helperText="Last name"
-                    name="last_name"
-                    onChange={handleChange}
-                    required
-                    value={accountSettings.lastName}
-                  />
-                </>
-              ) : (
-                `${accountSettings.firstName} ${accountSettings.lastName}`
-              )
-            }
-            style={{ textAlign: "center" }}
-            titleTypographyProps={{ variant: "h4" }}
-          />
+    <>
+      <SettingsSidebar />
+      <div className="main-content">
+        <div className="settings">
+          <h2>Account</h2>
+          <div style={props.style} className={props.classes}>
+            <form>
+              <Grid container spacing={2}>
+                <Grid item xs={1}></Grid>
 
-          <CardContent>
-            <Grid container spacing={2}>
-              <Grid item xs={1}></Grid>
-
-              <Grid item xs={"auto"}>
-                <EmailIcon />
-              </Grid>
-              <Grid item xs={10}>
-                {editMode ? (
+                <Grid item xs={3}>
+                  Name
+                </Grid>
+                <Grid item xs={8}>
                   <TextField
                     fullWidth
-                    name="phone"
+                    name="name"
                     onChange={handleChange}
-                    value={accountSettings.email}
+                    value={accountSettings.name}
                   />
-                ) : (
-                  accountSettings.email
-                )}
-              </Grid>
-              <Grid item xs={1}></Grid>
+                </Grid>
 
-              <Grid item xs={"auto"}>
-                <EmailIcon />
-              </Grid>
-              <Grid item xs={10}>
-                {editMode ? (
+                <Grid item xs={1}></Grid>
+                <Grid item xs={3}>
+                  Email
+                </Grid>
+                <Grid item xs={8}>
                   <TextField
                     fullWidth
                     name="email"
                     onChange={handleChange}
+                    value={accountSettings.email}
+                  />
+                </Grid>
+
+                <Grid item xs={1}></Grid>
+                <Grid item xs={3}>
+                  Location
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    name="location"
+                    onChange={handleChange}
                     value={accountSettings.location}
                   />
-                ) : (
-                  accountSettings.location
-                )}
+                </Grid>
+                <Grid item xs={1}></Grid>
               </Grid>
-              <Grid item xs={1}></Grid>
-            </Grid>
 
-              
-
-            <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
-              {editMode ? (
-                deleteWarning ? (
+              <CardActions style={{ justifyContent: "center", marginTop: 10 }}>
+                {deleteWarning ? (
                   <>
                     <Alert severity="error">
                       <strong>
@@ -240,7 +174,7 @@ const AccountSettings = ({ userId, ...props }) => {
                       onClick={() => {
                         // TODO: delete account
                         setDeleteWarning(false);
-                        props.handleClose();
+                        history.push("/settings")
                       }}
                     >
                       Yes, delete my CoachTrackr account
@@ -269,29 +203,35 @@ const AccountSettings = ({ userId, ...props }) => {
                       variant="contained"
                       onClick={() => {
                         setEditMode(false);
+                        history.push("/settings");
                       }}
                     >
                       Cancel
                     </Button>
-                    <Button
-                      color="secondary"
-                      variant="outlined"
-                      onClick={() => {
-                        setDeleteWarning(true);
-                      }}
-                    >
-                      Delete Account
-                    </Button>
                   </>
-                )
-              ) : (
+                )}
+              </CardActions>
+              {deleteWarning ? (
                 ""
+              ) : (
+                <>
+                  <Button color="secondary">Manage Subscription </Button>
+                  <Button color="secondary">Change Password</Button>
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      setDeleteWarning(true);
+                    }}
+                  >
+                    Delete Account
+                  </Button>
+                </>
               )}
-            </CardActions>
-          </CardContent>
-        </Card>
-      </form>
-    </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

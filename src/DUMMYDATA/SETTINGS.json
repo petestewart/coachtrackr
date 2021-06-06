@@ -1,7 +1,21 @@
 {
-  "firstName": "John",
-  "lastName": "Smith",
+  "name": "John Smith",
   "email": "johnsmith@email.com",
   "location": "Seattle, WA",
-  "currentCertification": 1
+  "currentCertification": 1,
+  "notifications": {
+    "sessionReminderHoursBefore": 1,
+    "clientMilestonesMonth": true,
+    "clientMilestonesYear": true,
+    "topClient": false,
+    "certificationRequirements": {
+      "frequencyInWeeks": 2,
+      "dayOfWeek": 1
+    },
+    "certificationAccomplishments": {
+      "anything": false,
+      "clienteleIncrease": true,
+      "hoursIncrease": true
+    }
+  }
 }
