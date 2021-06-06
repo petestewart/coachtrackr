@@ -9,33 +9,14 @@ import SettingsSidebar from "../Settings/SettingsSidebar";
 // import Box from "@material-ui/core/Box";
 
 import Alert from "@material-ui/lab/Alert";
-import Avatar from "@material-ui/core/Avatar";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Fade from "@material-ui/core/Fade";
 
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import CloseIcon from "@material-ui/icons/Close";
-
-import PhoneIcon from "@material-ui/icons/Phone";
-import EmailIcon from "@material-ui/icons/Email";
-import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
-import EventIcon from "@material-ui/icons/Event";
-import NotesIcon from "@material-ui/icons/Notes";
 
 import {
   Grid,
   makeStyles,
-  Typography,
-  Card,
-  CardContent,
-  CardHeader,
   CardActions,
   TextField,
   Button,
-  ButtonGroup,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({

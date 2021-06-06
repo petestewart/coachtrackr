@@ -12,7 +12,6 @@ import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 // import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import Collapse from "@material-ui/core/Collapse";
 
-
 const MenuExpander = (props) => {
   return (
     <div className="sidebar-expander">
@@ -47,6 +46,7 @@ const SidebarItem = ({
   item,
   hideLabel = false,
   active,
+  noHistory,
   ...rest
 }) => {
   const { label, items, Icon, onClick: onClickProp } = item;
@@ -80,10 +80,13 @@ const SidebarItem = ({
   //   );
   // }
 
+  const history = useHistory();
+
   return (
     <>
       <ListItem
         className="sidebar-item"
+        // onClick={onClick}
         onClick={onClick}
         button
         dense
@@ -137,8 +140,6 @@ const Sidebar = ({
   hideLabels,
   activePath,
 }) => {
-
-
   return (
     <div className={`sidebar ${hideLabels ? "" : "sidebar-full-width"}`}>
       {/* Top button (either menu expander or back button) */}
@@ -162,6 +163,7 @@ const Sidebar = ({
                 item={sidebarItem}
                 hideLabel={hideLabels}
                 active={sidebarItem.route === activePath}
+                noHistory={backButton}
               />
             )}
           </React.Fragment>

@@ -7,13 +7,17 @@ import Sessions from "../Sessions";
 import Sync from "../Sync";
 import CCEU from "../CCEU";
 import Settings from "../Settings";
-import Help from "../Help";
 
 import ScrollToTop from "../UI/ScrollToTop";
 
 import SideNavDrawer from "../SideNav/SideNavDrawer"
 import AccountSettings from "../Settings/AccountSettings";
 import NotificationsSettings from "../Settings/NotificationsSettings";
+import ExternalAppsSettings from "../Settings/ExternalAppsSettings";
+import CertSettings from "../Settings/CertSettings";
+import About from "../Settings/About";
+import Help from "../Settings/Help";
+import Share from "../Settings/Share";
 
 const ApplicationViews = (props) => {
   const [clientsModal, setClientsModal] = useState('')
@@ -116,6 +120,46 @@ const ApplicationViews = (props) => {
         exact
         path="/settings-notifications"
         render={(props) => <NotificationsSettings history={props.history} {...props} />}
+      />
+
+      {/* Settings > Notifications Settings */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/settings-external"
+        render={(props) => <ExternalAppsSettings history={props.history} {...props} />}
+      />
+
+      {/* Settings > Notifications Settings */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/settings-cceu"
+        render={(props) => <CertSettings history={props.history} {...props} />}
+      />
+
+      {/* Settings > Notifications Settings */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/settings-about"
+        render={(props) => <About history={props.history} {...props} />}
+      />
+
+      {/* Settings > Notifications Settings */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/settings-help"
+        render={(props) => <Help history={props.history} {...props} />}
+      />
+
+      {/* Settings > Notifications Settings */}
+      <ScrollToTop />
+      <Route
+        exact
+        path="/settings-share"
+        render={(props) => <Share history={props.history} {...props} />}
       />
 
       {/* Help */}
