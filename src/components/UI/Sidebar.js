@@ -22,7 +22,7 @@ const MenuExpander = (props) => {
   );
 };
 
-const BackButton = () => {
+const BackButton = (props) => {
   const history = useHistory();
 
   return (
@@ -31,7 +31,8 @@ const BackButton = () => {
         <ArrowBackIosRoundedIcon
           fontSize="large"
           onClick={() => {
-            history.goBack();
+            // history.goBack();
+            history.push(props.destination)
           }}
         />
       </Button>
@@ -136,6 +137,7 @@ const Sidebar = ({
   depth,
   expanded,
   backButton,
+  backButtonDest,
   toggleLabels,
   hideLabels,
   activePath,
@@ -144,7 +146,7 @@ const Sidebar = ({
     <div className={`sidebar ${hideLabels ? "" : "sidebar-full-width"}`}>
       {/* Top button (either menu expander or back button) */}
       {backButton ? (
-        <BackButton />
+        <BackButton destination={backButtonDest} />
       ) : (
         <MenuExpander toggleLabels={toggleLabels} />
       )}

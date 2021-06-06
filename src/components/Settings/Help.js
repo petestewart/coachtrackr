@@ -6,15 +6,7 @@ import { SettingsContext } from "./SettingsProvider";
 
 import SettingsSidebar from "./SettingsSidebar";
 
-
-
-
-
-import {
-  makeStyles,
-
-} from "@material-ui/core";
-
+import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,19 +19,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const Help = ({ userId, ...props }) => {
-  
+  const { bookmark } = useContext(SettingsContext);
 
   return (
     <>
-      <SettingsSidebar />
       <div className="main-content">
         <div className="settings">
           <div style={props.style} className={props.classes}>
-            
             <h2>Help</h2>
-              
           </div>
         </div>
       </div>

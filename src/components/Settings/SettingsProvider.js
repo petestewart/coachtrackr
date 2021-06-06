@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from "react";
 
+import { useHistory, useLocation } from "react-router-dom";
+
+
 import SETTINGS from "../../DUMMYDATA/SETTINGS.json";
 
 export const SettingsContext = React.createContext();
 
 export const SettingsProvider = (props) => {
   const [allSettings, setAllSettings] = useState(SETTINGS);
+
+  const [bookmark, setBookmark] = useState("");
+
+  const location = useLocation();
+
+
+  useEffect(() => {
+    if (location.pathname.substring(0, 9) !== "/settings") {
+      setBookmark(location.pathname);
+    }
+  }, [location]);
+
 
   const getAccountSettings = () =>
     new Promise((resolve) => {
@@ -52,6 +67,7 @@ export const SettingsProvider = (props) => {
         getNotificationSettings,
         updateNotificationSettings,
         allSettings,
+        bookmark
       }}
     >
       {props.children}

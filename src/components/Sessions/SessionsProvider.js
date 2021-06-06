@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 
 import SESSIONS from "../../DUMMYDATA/SESSIONS.json";
 import CLIENTS from "../../DUMMYDATA/CLIENTS.json";
@@ -7,6 +9,7 @@ export const SessionsContext = React.createContext();
 
 export const SessionsProvider = (props) => {
   const [allSessions, setAllSessions] = useState(SESSIONS);
+
 
   // const getSessions = () => SESSIONS;
 
