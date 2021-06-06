@@ -64,6 +64,14 @@ const CreateSession = ({ sessionId, ...props }) => {
 
   const [clientList, setClientList] = useState([]);
 
+  const [duplicated, setDuplicated] = useState(false);
+
+  useEffect(() => {
+    if (props.clientId) {
+      setDuplicated(true);
+    }
+  }, [props.clientId]);
+
   useEffect(() => {
     if (allClients) {
       setClientList(
@@ -169,19 +177,31 @@ const CreateSession = ({ sessionId, ...props }) => {
                     </MenuItem>
                   ))}
                 </TextField> */}
-                <Autocomplete
-                  name="clientId"
-                  onChange={(event, newValue) => {
-                    if (newValue) {
-                      setSession({ ...session, clientId: newValue.id });
+
+                {duplicated && clientList.length > 0 ? (
+                  <TextField
+                    defaultValue={
+                      clientList.find((client) => client.id === props.clientId)
+                        .name || ""
                     }
-                  }}
-                  options={clientList}
-                  getOptionLabel={(option) => option.name}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Client name" />
-                  )}
-                />
+                    onClick={() => {setDuplicated(false)}}
+                  />
+                ) : (
+                  <Autocomplete
+                    autocomplete
+                    name="clientId"
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                        setSession({ ...session, clientId: newValue.id });
+                      }
+                    }}
+                    options={clientList}
+                    getOptionLabel={(option) => option.name}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Client name" />
+                    )}
+                  />
+                )}
               </Grid>
 
               <Grid item xs={1}></Grid>

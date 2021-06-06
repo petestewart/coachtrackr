@@ -147,7 +147,9 @@ const Sessions = (props) => {
           style={modalStyle}
           classes={classes.paper}
           handleClose={handleClose}
+          handleAddSession={handleAddSession}
           {...modalSession}
+          clientId={modalSession.clientId}
           date={dayjs(modalSession.date).add(7, "day").format("MM/DD/YYYY")}
         />
       ),
